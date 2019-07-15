@@ -1,5 +1,6 @@
 import styled from "@emotion/styled"
 import { Button } from "antd"
+import Container from "Components/container"
 
 const Title = styled.h2`
   font-size: 38px;
@@ -41,3 +42,39 @@ export const GlobalTitle = ({title, desc, link, color, button}) => (
     </ButtonStyled>
   </GlobalTitleWrap>
 )
+
+const GlobalBannerWrap = styled.div`
+  height: 400px;
+  ${({children, ...props}) => ({...props})}
+`
+
+export const GlobalBanner = ({children, ...props}) => (
+  <GlobalBannerWrap {...props}>
+    <Container>
+      asdf
+    </Container>
+  </GlobalBannerWrap>
+)
+
+const GlobalContentWrap = styled.div`
+  margin-top: -60px;
+`
+const _ContentInner = styled.div`
+  background: #fff;
+  padding: 40px;
+`
+export const GlobalContent = ({children}) => (
+  <GlobalContentWrap>
+    <Container>
+      <_ContentInner>
+        {children}
+      </_ContentInner>
+    </Container>
+  </GlobalContentWrap>
+)
+
+export const BackgroundImage = styled.img`
+  object-fit: cover;
+  width: 100%;
+  ${({children, ...props}) => ({...props})}
+`
