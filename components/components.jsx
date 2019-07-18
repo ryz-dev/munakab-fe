@@ -45,19 +45,42 @@ export const GlobalTitle = ({title, desc, link, color, button}) => (
 
 const GlobalBannerWrap = styled.div`
   height: 400px;
+  position: relative;
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 0;
+    content: "";
+    background: rgba(0,0,0,.5);
+  }
+  &:before {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    content: "";
+    z-index: 0;
+    background: ${({bg}) => `url('${bg}')`};
+    background-size: cover;
+  }
   ${({children, ...props}) => ({...props})}
 `
 
 export const GlobalBanner = ({children, ...props}) => (
   <GlobalBannerWrap {...props}>
     <Container>
-      asdf
+      {children}
     </Container>
   </GlobalBannerWrap>
 )
 
 const GlobalContentWrap = styled.div`
   margin-top: -60px;
+  position: relative;
 `
 const _ContentInner = styled.div`
   background: #fff;

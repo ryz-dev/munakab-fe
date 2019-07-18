@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react"
 import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
 import Container from "Components/container"
-import { Row, Col, Carousel } from "antd"
+import { Row, Col, Carousel, Pagination } from "antd"
 
 const DetailWrap = styled.div`
 
@@ -59,9 +59,39 @@ const NewsItem = () => (
 )
 
 const HeroItem = styled.div`
-
+  padding: 10px;
 `
-
+const HeroItemWrap = () => (
+  <HeroItem>
+    <Row type="flex" align="middle" gutter={40}>
+      <Col md={12}>
+        <div>
+          <BackgroundImage src="/static/mekanisme-sop.jpg" height={400}/>
+        </div>
+      </Col>
+      <Col md={12}>
+        <div>
+          <NewsDate fontSize={18}>
+            12 December 2019
+          </NewsDate>
+          <Title fontSize={38} lineHeight={1.2} marginTop={20}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit
+          </Title>
+          <Desc fontSize={18} marginTop={35}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </Desc>
+        </div>
+      </Col>
+    </Row>
+  </HeroItem>
+)
+const HeroGalleryItem = styled.div`
+  padding: 10px;
+`
+const PaginationWrap = styled.div`
+  padding: 60px 0;
+  text-align: center;
+`
 
 const Detail = () => {
   const [heroNews, setHeroNews] = useState(null)
@@ -75,87 +105,63 @@ const Detail = () => {
   }, [])
   return (
     <DetailWrap>
-      <GlobalBanner>
+      <GlobalBanner bg="/static/mekanisme-sop.jpg">
         adsf
       </GlobalBanner>
       <GlobalContent>
         <Carousel
             asNavFor={itemNews}
+            dots={false}
             ref={heroNewsRef}
           >
-            <HeroItem>
-              <Row type="flex" align="middle" gutter={40}>
-                <Col md={12}>
-                  <div>
-                    <BackgroundImage src="/static/mekanisme-sop.jpg" height={400}/>
-                  </div>
-                </Col>
-                <Col md={12}>
-                  <div>
-                    <NewsDate fontSize={18}>
-                      12 December 2019
-                    </NewsDate>
-                    <Title fontSize={38} lineHeight={1.2} marginTop={20}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                    </Title>
-                    <Desc fontSize={22} marginTop={35}>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </Desc>
-                  </div>
-                </Col>
-              </Row>
-            </HeroItem>
-            <div>
-              <h3>2</h3>
-            </div>
-            <div>
-              <h3>3</h3>
-            </div>
-            <div>
-              <h3>4</h3>
-            </div>
-            <div>
-              <h3>5</h3>
-            </div>
-            <div>
-              <h3>6</h3>
-            </div>
+            <HeroItemWrap/>
+            <HeroItemWrap/>
+            <HeroItemWrap/>
+            <HeroItemWrap/>
+            <HeroItemWrap/>
+            <HeroItemWrap/>
           </Carousel>
           <Carousel
             asNavFor={heroNews}
             ref={itemNewsRef}
-            slidesToShow={3}
+            dots={false}
+            slidesToShow={4}
             swipeToSlide={true}
+            autoplay={true}
+            speed={8000}
+            autoplaySpeed={2000}
+            cssEase="linear"
             focusOnSelect={true}
           >
             <div>
-              <Row type="flex">
-                <Col md={12}>
-                  <div>
-                    <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-                  </div>
-                </Col>
-                <Col md={12}>
-                  <div>
-                    test
-                  </div>
-                </Col>
-              </Row>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
             <div>
-              <h3>2</h3>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
             <div>
-              <h3>3</h3>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
             <div>
-              <h3>4</h3>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
             <div>
-              <h3>5</h3>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
             <div>
-              <h3>6</h3>
+              <HeroGalleryItem>
+                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+              </HeroGalleryItem>
             </div>
           </Carousel>
       </GlobalContent>
@@ -167,6 +173,9 @@ const Detail = () => {
             <NewsItem/>
             <NewsItem/>
           </PopularNews>
+          <PaginationWrap>
+            <Pagination defaultCurrent={1} total={50} />
+          </PaginationWrap>
         </Container>
       </div>
     </DetailWrap>

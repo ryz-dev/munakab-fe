@@ -24,6 +24,7 @@ const List = styled.ul`
 `
 const GNFooter = styled.div`
 	padding: 30px 0;
+	text-align: center;
 `
 
 const Globalfooter = () => {
