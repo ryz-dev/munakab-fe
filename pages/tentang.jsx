@@ -1,5 +1,5 @@
 import styled from "@emotion/styled"
-import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
+import { GlobalBanner, GlobalContent, BackgroundImage, GBHeader } from "Components/components"
 import Container from "Components/container"
 import { Row, Col } from "antd"
 
@@ -111,12 +111,10 @@ const Detail = () => {
   return (
     <DetailWrap>
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
-        <GBFlex>
-          <Flex>
-            <h2>Selayang Pandang</h2>
-            <span>Kab. Muna</span>
-          </Flex>
-        </GBFlex>
+        <GBHeader
+          title="Selayang Pandang"
+          desc="Kab. Muna"
+        />
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
