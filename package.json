@@ -1,0 +1,25 @@
+{
+  "name": "munakab-fe",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://muhrusdi@bitbucket.org/xydev/munakab-fe.git",
+  "author": "muhammad Rusdi <muhamamdrusdi@icloud.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.14",
+    "@emotion/styled": "^10.0.14",
+    "@zeit/next-css": "^1.0.1",
+    "antd": "^3.20.1",
+    "next": "^9.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@emotion/babel-preset-css-prop": "^10.0.14"
+  }
+}
