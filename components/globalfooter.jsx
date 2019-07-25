@@ -2,6 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 import { Row, Col } from "antd"
 import Container from "Components/container"
+import { globalFetch } from "Config/api"
 
 const GlobalfooterWrap = styled.footer`
 	padding: 40px 0;
@@ -28,33 +29,32 @@ const GNFooter = styled.div`
 	text-align: center;
 `
 
-const Globalfooter = () => {
+const Globalfooter = ({data}) => {
   return (
 		<GlobalfooterWrap>
 			<Container>
 				<Row type="flex">
-					<Col sm={6} xs={24}>
-						<div>
-							<List>
-								<li>
-									<h4>Muna</h4>
-								</li>
-								<li>
-									<a href="#">Beranda</a>
-								</li>
-								<li>
-									<a href="#">Profil</a>
-								</li>
-								<li>
-									<a href="#">OPD</a>
-								</li>
-								<li>
-									<a href="#">Berita</a>
-								</li>
-							</List>
-						</div>
-					</Col>
-					<Col sm={6} xs={24}>
+					{
+						data.data.map(item => (
+							<Col sm={6} xs={24} key={item.id}>
+								<div>
+									<List>
+										<li>
+											<h4>{item.title}</h4>
+										</li>
+										{
+											item.children && item.children.map(itemChild => (
+												<li>
+													<a href="#">{itemChild.title}</a>
+												</li>
+											))
+										}
+									</List>
+								</div>
+							</Col>
+						))
+					}
+					{/* <Col sm={6} xs={24}>
 						<div>
 							<List>
 								<li>
@@ -116,7 +116,7 @@ const Globalfooter = () => {
 								</li>
 							</List>
 						</div>
-					</Col>
+					</Col> */}
 				</Row>
 				<GNFooter>
 					<div>

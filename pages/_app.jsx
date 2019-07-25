@@ -1,6 +1,7 @@
 import React from "react"
 import App, { Container } from "next/app"
 import Layout from "Components/layout"
+import { globalFetch } from "Config/api"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -10,15 +11,22 @@ class MyApp extends App {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    return { pageProps }
+    let data = null
+
+    await globalFetch("/api/menu/footer")
+      .then(_data => {
+        data = _data
+      })
+
+    return { pageProps, data }
   }
 
   render() {
-    const { Component, pageProps, store } = this.props
-
+    const { Component, pageProps, data } = this.props
+    console.log(data)
     return (
       <Container>
-        <Layout>
+        <Layout dataFooter={data}>
           <Component {...pageProps} />
         </Layout>
       </Container>

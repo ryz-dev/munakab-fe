@@ -1,5 +1,7 @@
+require('dotenv').config()
 const path = require("path")
 const withCss = require("@zeit/next-css")
+const Dotenv = require('dotenv-webpack')
 
 const aliases = {
   Containers: path.resolve(__dirname, "containers"),
@@ -20,7 +22,10 @@ const aliases = {
 const nextConfig = withCss({
   // Alias
   alias: aliases,
-
+  publicRuntimeConfig: {
+    // Will be available on both server and client
+    host: `${process.env.HOST}:${process.env.PORT_BE}`
+  },
   // Webpack
   webpack: config => {
     // Resolve path
@@ -29,6 +34,16 @@ const nextConfig = withCss({
       extensions: [...config.resolve.extensions, ".scss", ".css", ".mdx"],
       alias: { ...config.resolve.alias, ...aliases },
     }
+
+    config.plugins = [
+      ...config.plugins,
+
+      // Read the .env file
+      new Dotenv({
+        path: path.join(__dirname, '.env'),
+        systemvars: true
+      })
+    ]
 
     return config
   }

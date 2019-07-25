@@ -20,6 +20,8 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "@emotion/babel-preset-css-prop": "^10.0.14"
+    "@emotion/babel-preset-css-prop": "^10.0.14",
+    "dotenv-webpack": "^1.7.0",
+    "isomorphic-unfetch": "^3.0.0"
   }
 }

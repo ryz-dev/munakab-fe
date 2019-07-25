@@ -3,7 +3,7 @@ import GlobalStyles from "Components/globalstyles"
 import Globalfooter from "Components/globalfooter"
 import Head from "next/head"
 
-const Layout = ({children}) => {
+const Layout = ({children, dataFooter}) => {
   return (
     <>
       <Head>
@@ -14,7 +14,7 @@ const Layout = ({children}) => {
       <div>
         {children}
       </div>
-      <Globalfooter/>
+      <Globalfooter data={dataFooter}/>
     </>
   )
 }
