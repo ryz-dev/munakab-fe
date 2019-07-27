@@ -3,18 +3,18 @@ import GlobalStyles from "Components/globalstyles"
 import Globalfooter from "Components/globalfooter"
 import Head from "next/head"
 
-const Layout = ({children, dataFooter}) => {
+const Layout = ({children, data}) => {
   return (
     <>
       <Head>
         <title>Beranda - Kab. Muna</title>
       </Head>
-      <Globalnav />
+      <Globalnav data={data[0]} />
       <GlobalStyles/>
       <div>
         {children}
       </div>
-      <Globalfooter data={dataFooter}/>
+      <Globalfooter data={data[1]} />
     </>
   )
 }

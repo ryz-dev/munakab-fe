@@ -1,11 +1,12 @@
 import React from "react"
 import styled from "@emotion/styled"
+import Link from "next/link"
 import { Row, Col } from "antd"
 import Container from "Components/container"
 import { globalFetch } from "Config/api"
 
 const GlobalfooterWrap = styled.footer`
-	padding: 40px 0;
+	padding: 40px 0; 
 	background: #fff;
 	color: #727272;
 `
@@ -44,8 +45,8 @@ const Globalfooter = ({data}) => {
 										</li>
 										{
 											item.children && item.children.map(itemChild => (
-												<li>
-													<a href="#">{itemChild.title}</a>
+												<li key={itemChild.id}>
+													<Link href="#">{itemChild.title}</Link>
 												</li>
 											))
 										}

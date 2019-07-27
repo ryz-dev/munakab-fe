@@ -1,7 +1,8 @@
 import React from "react"
 import App, { Container } from "next/app"
 import Layout from "Components/layout"
-import { globalFetch } from "Config/api"
+import { globalFetch, host } from "Config/api"
+import "isomorphic-unfetch"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -13,20 +14,27 @@ class MyApp extends App {
 
     let data = null
 
-    await globalFetch("/api/menu/footer")
-      .then(_data => {
-        data = _data
-      })
+    if (ctx.req) {
+      const fetchHeader = fetch(`${host}/api/menu/header`)
+      const fetchFooter = fetch(`${host}/api/menu/footer`)
+
+      await globalFetch([
+        fetchHeader,
+        fetchFooter
+      ])
+        .then(_data => {
+          data = _data
+        })
+    }
 
     return { pageProps, data }
   }
 
   render() {
     const { Component, pageProps, data } = this.props
-    console.log(data)
     return (
       <Container>
-        <Layout dataFooter={data}>
+        <Layout data={data}>
           <Component {...pageProps} />
         </Layout>
       </Container>
