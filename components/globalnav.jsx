@@ -317,3 +317,9 @@ const Globalnav = ({data}) => {
 }
 
 export default Globalnav
+
+Globalnav.defaultProps = {
+  data: {
+    data: []
+  }
+}

@@ -22,6 +22,7 @@ const aliases = {
 const nextConfig = withCss({
   // Alias
   alias: aliases,
+  target: "server",
   env: {
     // Will be available on both server and client
     host: `${process.env.HOST}:${process.env.PORT_BE}`

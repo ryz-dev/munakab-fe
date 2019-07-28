@@ -4,6 +4,7 @@ import Globalfooter from "Components/globalfooter"
 import Head from "next/head"
 
 const Layout = ({children, data}) => {
+  console.log(data)
   return (
     <>
       <Head>
@@ -19,4 +20,13 @@ const Layout = ({children, data}) => {
   )
 }
 
+Layout.getInitialProps = async () => {
+  console.log("--->asdfadsf")
+  return {}
+}
+
 export default Layout
+
+Layout.defaultProps = {
+  data: []
+}

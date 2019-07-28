@@ -71,6 +71,11 @@ const TextBox = styled.div`
     color: #fff;
     font-weight: bold;
   }
+  p {
+    line-height: 1.4;
+    font-size: 24px;
+    margin-top: 20px;
+  }
 `
 const ButtonStyledBanner = styled(ButtonStyled)`
   border: 1px solid #fff;
@@ -79,34 +84,29 @@ const ButtonStyledBanner = styled(ButtonStyled)`
     background: none;
   }
 `
-const Banner = () => {
+const Banner = ({data}) => {
   return (
     <BannerWrap>
       <Carousel>
-        <Item bg="/static/mekanisme-sop.jpg">
-          <Container>
-            <div>
-              <TextBox>
-                <div>
-                  <h1>Selamat datang <br/>di Kabupaten Muna</h1>
-                  <ButtonStyledBanner>
-                    Selengkpanya
-                  </ButtonStyledBanner>
-                </div>
-              </TextBox>
-            </div>
-          </Container>
-        </Item>
-        <Item bg="/static/mekanisme-sop.jpg">
-          <Container>
-            <div>
-              <TextBox>
-                <h1>Selamat datang di Kabupaten Muna</h1>
-                <button>Slengkapnya</button>
-              </TextBox>
-            </div>
-          </Container>
-        </Item>
+      {
+        data.data.map(item => (
+          <Item bg={item.image}>
+            <Container>
+              <div>
+                <TextBox>
+                  <div>
+                    <h1>{item.title}</h1>
+                    <p>{item.deskripsi}</p>
+                    {/* <ButtonStyledBanner>
+                      Selengkpanya
+                    </ButtonStyledBanner> */}
+                  </div>
+                </TextBox>
+              </div>
+            </Container>
+          </Item>
+        ))
+      }
       </Carousel>
     </BannerWrap>
   )

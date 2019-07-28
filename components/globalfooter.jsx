@@ -130,3 +130,9 @@ const Globalfooter = ({data}) => {
 }
 
 export default Globalfooter
+
+Globalfooter.defaultProps = {
+	data: {
+		data: []
+	}
+}

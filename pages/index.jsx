@@ -6,10 +6,11 @@ import Berita from "Components/home/berita"
 import Announcement from "Components/home/pengumuman"
 import Gallery from "Components/home/gallery"
 import Pengaduan from "Components/home/pengaduan"
+import { globalFetch, host } from "Config/api"
 
-const Home = () => (
+const Home = ({data}) => (
   <>
-    <Banner/>
+    <Banner data={data[0]}/>
     <About/>
     <BeritaPopuler/>
     <Berita/>
@@ -18,5 +19,17 @@ const Home = () => (
     <Pengaduan/>
   </>
 )
+
+Home.getInitialProps = async () => {
+  const fetchBanner = fetch(`${host}/api/slider`)
+  let data = null
+  await globalFetch([
+    fetchBanner
+  ])
+    .then(_data => {
+      data = _data
+    })
+  return {data}
+}
 
 export default Home
