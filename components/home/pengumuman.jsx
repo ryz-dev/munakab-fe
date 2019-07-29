@@ -4,7 +4,11 @@ import { Row, Col } from "antd"
 import { GlobalTitle } from "Components/components"
 
 const AnnauncementWrap = styled.div`
+<<<<<<< HEAD
   padding: 60px 0;
+=======
+  padding: 60px 0 150px 0;
+>>>>>>> 67f1d786f16b2dbb80f415573f1037d8d97bc0e4
   background: #fff;
 `
 const Title = styled.p`

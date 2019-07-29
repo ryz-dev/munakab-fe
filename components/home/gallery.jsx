@@ -6,7 +6,11 @@ import { Carousel } from 'antd'
 
 const GalleryWrap = styled.div`
   position: relative;
+<<<<<<< HEAD
   padding: 80px 0;
+=======
+  padding: 100px 0;
+>>>>>>> 67f1d786f16b2dbb80f415573f1037d8d97bc0e4
   .ant-carousel {
     .slick-slide {
       height: 450px;
