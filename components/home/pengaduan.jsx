@@ -1,14 +1,17 @@
 import styled from "@emotion/styled"
 import Container from "Components/container"
-import { Row, Col } from "antd"
+import { Row, Col, Form, Input } from "antd"
 
 const PengaduanWrap = styled.div`
   background: #fff;
   padding: 120px 0;
 `
-const PengaduanInner = styled.div`
+const PengaduanInner = styled(Form)`
   background: #f4f4f4;
   padding: 75px;
+`
+const FormItem = styled(Form.Item)`
+
 `
 const H3 = styled.h3`
   color: #091a43;
@@ -19,9 +22,9 @@ const Desc = styled.p`
   color: #727272;
   margin-top: 20px;
 `
-const Input = styled.input`
+const InputStyled = styled(Input)`
   height: 45px;
-  padding: 20px;
+  padding: 0 20px;
   border: 1px solid transparent;
   width: 100%;
   border-radius: 3px;
@@ -36,11 +39,22 @@ const TextArea = styled.textarea`
   color: #727272;
 `
 
-const Pengaduan = () => {
+const Pengaduan = ({form}) => {
+  const { getFieldDecorator } = form
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    form.validateFields(err => {
+      if (!err) {
+        console.info('success');
+      }
+    })
+  }
+
   return (
     <PengaduanWrap>
       <Container xl>
-        <PengaduanInner>
+        <PengaduanInner onSubmit={handleSubmit}>
           <Row type="flex" align="middle" gutter={30}>
             <Col md={10}>
               <div>
@@ -52,19 +66,53 @@ const Pengaduan = () => {
               <div>
                 <Row type="flex" gutter={20}>
                   <Col md={12}>
-                    <div>
-                      <Input placeholder="Nama"/>
-                    </div>
+                    <FormItem>
+                      {getFieldDecorator('nama_lengkap', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Masukkan Nama',
+                          },
+                        ],
+                      })(<InputStyled placeholder="Nama Lengkap"/>)}
+                    </FormItem>
                   </Col>
-                   <Col md={12}>
-                    <div>
-                      <Input placeholder="Email"/>
-                    </div>
+                  <Col md={12}>
+                    <FormItem>
+                      {getFieldDecorator('email', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Masukkan Email',
+                          },
+                        ],
+                      })(<InputStyled placeholder="Email"/>)}
+                    </FormItem>
+                  </Col>
+                  <Col md={24}>
+                    <FormItem>
+                      {getFieldDecorator('phone', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Masukan No. HP',
+                          },
+                        ],
+                      })(<InputStyled placeholder="No. HP"/>)}
+                    </FormItem>
                   </Col>
                    <Col md={24}>
-                    <div>
-                      <TextArea placeholder="Pesan"/>
-                    </div>
+                    <FormItem>
+                      {getFieldDecorator('message', {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Masukkan Pesan',
+                          },
+                        ],
+                      })(<InputStyled placeholder="Pesan"/>)}
+                      <button htmlType="submit">submit</button>
+                    </FormItem>
                   </Col>
                 </Row>
               </div>
@@ -76,4 +124,4 @@ const Pengaduan = () => {
   )
 }
 
-export default Pengaduan
+export default Form.create({name: "coordinated"})(Pengaduan)

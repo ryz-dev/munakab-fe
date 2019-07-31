@@ -1,5 +1,9 @@
+require('dotenv').config()
 const path = require("path")
 const withCss = require("@zeit/next-css")
+const Dotenv = require('dotenv-webpack')
+
+const isDev = process.env.NODE_ENV !== "production"
 
 const aliases = {
   Containers: path.resolve(__dirname, "containers"),
@@ -20,7 +24,11 @@ const aliases = {
 const nextConfig = withCss({
   // Alias
   alias: aliases,
-
+  env: {
+    // Will be available on both server and client
+    host: process.env.HOST
+  },
+  // assetPrefix: isDev ? '' : 'https://muna.ryzdev.id',
   // Webpack
   webpack: config => {
     // Resolve path
@@ -29,6 +37,16 @@ const nextConfig = withCss({
       extensions: [...config.resolve.extensions, ".scss", ".css", ".mdx"],
       alias: { ...config.resolve.alias, ...aliases },
     }
+
+    config.plugins = [
+      ...config.plugins,
+
+      // Read the .env file
+      new Dotenv({
+        path: path.join(__dirname, '.env'),
+        systemvars: true
+      })
+    ]
 
     return config
   }

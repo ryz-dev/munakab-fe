@@ -1,15 +1,15 @@
 import React from "react"
-import Document, { Head, Main, NextScript } from "next/document"
+import Document, { Html, Head, Main, NextScript } from "next/document"
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    const page = renderPage()
-    return { ...page }
+  static async getInitialProps(ctx) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return { ...initialProps };
   }
 
   render() {
     return (
-      <html lang="en">
+      <Html>
         <Head>
           <meta charSet="utf-8" />
           <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }
