@@ -32,12 +32,18 @@ class MyApp extends App {
 
     return { pageProps, data }
   }
+  constructor(props) {
+    super(props)
+    this.state = {
+      data: props.data
+    }
+  }
 
   render() {
-    const { Component, pageProps, data } = this.props
+    const { Component, pageProps } = this.props
     return (
       <Container>
-        <Layout data={data}>
+        <Layout data={this.state.data}>
           <Component {...pageProps} />
         </Layout>
       </Container>

@@ -1,19 +1,21 @@
 import styled from "@emotion/styled"
 import { Row, Col } from "antd"
 import Container from "Components/container"
-import { GlobalTitle } from "Components/components"
+import { GlobalTitle, maxSM } from "Components/components"
 import { Carousel } from 'antd'
 
 const GalleryWrap = styled.div`
   position: relative;
-<<<<<<< HEAD
-  padding: 80px 0;
-=======
   padding: 100px 0;
->>>>>>> 67f1d786f16b2dbb80f415573f1037d8d97bc0e4
   .ant-carousel {
+    ${maxSM} {
+      margin-top: 30px;
+    }
     .slick-slide {
       height: 450px;
+      ${maxSM} {
+        height: 240px;
+      }
     }
     .slick-dots-bottom {
       bottom: -30px;
@@ -37,6 +39,9 @@ const GalleryWrap = styled.div`
     bottom: 0;
     content: " ";
     z-index: -1;
+    ${maxSM} {
+      width: 100%;
+    }
   }
 `
 const GalleryItemInner = styled.img`
@@ -46,6 +51,11 @@ const GalleryItemInner = styled.img`
 `
 const GalleryItemWrap = styled.div`
   
+`
+const StyledCol = styled(Col)`
+  ${maxSM} {
+    max-width: 100%;
+  }
 `
 const GalleryItem = () => (
   <GalleryItemWrap>
@@ -63,7 +73,7 @@ const Gallery = () => {
     <GalleryWrap>
       <Container xl>
         <Row type="flex" align="middle">
-          <Col md={8}>
+          <Col sm={24} md={8}>
             <div>
               <GlobalTitle
                 title="Gallery"
@@ -76,7 +86,7 @@ const Gallery = () => {
               />
             </div>
           </Col>
-          <Col md={16}>
+          <StyledCol sm={24} md={16}>
             <div>
               <Carousel {...settings}>
                 <GalleryItem/>
@@ -85,7 +95,7 @@ const Gallery = () => {
                 <GalleryItem/>
               </Carousel>
             </div>
-          </Col>
+          </StyledCol>
         </Row>
       </Container>
     </GalleryWrap>

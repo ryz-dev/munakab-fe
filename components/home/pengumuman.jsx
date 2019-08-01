@@ -1,14 +1,10 @@
 import styled from "@emotion/styled"
 import Container from "Components/container"
 import { Row, Col } from "antd"
-import { GlobalTitle } from "Components/components"
+import { GlobalTitle, maxSM } from "Components/components"
 
 const AnnauncementWrap = styled.div`
-<<<<<<< HEAD
-  padding: 60px 0;
-=======
   padding: 60px 0 150px 0;
->>>>>>> 67f1d786f16b2dbb80f415573f1037d8d97bc0e4
   background: #fff;
 `
 const Title = styled.p`
@@ -19,6 +15,9 @@ const Title = styled.p`
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  ${maxSM} {
+    display: block;
+  }
 `
 const ImgItem = styled.div`
   width: 88px;
@@ -43,6 +42,9 @@ const ImgItem = styled.div`
 const TitleWrap = styled.div`
   border-bottom: 1px solid #d5d5d5;
   padding: 40px 0;
+  ${maxSM} {
+    padding: 20px 0;
+  }
 `
 const List = styled.ul`
   list-style: none;
@@ -50,6 +52,13 @@ const List = styled.ul`
   background: #f8f8f8;
   li {
     height: 133px;
+  }
+  ${maxSM} {
+    margin-top: 40px;
+    li {
+      height: initial;
+      margin-bottom: 30px;
+    }
   }
 `
 const ListItem = () => (
@@ -74,12 +83,18 @@ const ListItem = () => (
   </li>
 )
 
+const StyledCol = styled(Col)`
+  ${maxSM} {
+    max-width: 100%;
+  }
+`
+
 const Annauncement = () => {
   return (
     <AnnauncementWrap>
       <Container xl>
         <Row type="flex" align="middle">
-          <Col md={8}>
+          <Col sm={24} md={8}>
             <div>
               <GlobalTitle
                 title="Pengumuman"
@@ -91,7 +106,7 @@ const Annauncement = () => {
               />
             </div>
           </Col>
-          <Col md={16}>
+          <StyledCol sm={24} md={16}>
             <div>
               <List>
                 <ListItem/>
@@ -99,7 +114,7 @@ const Annauncement = () => {
                 <ListItem/>
               </List>
             </div>
-          </Col>
+          </StyledCol>
         </Row>
       </Container>
     </AnnauncementWrap>

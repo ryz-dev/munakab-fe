@@ -1,11 +1,14 @@
 import styled from "@emotion/styled"
 import { Row, Col } from "antd"
 import Container from "Components/container"
-import { GlobalTitle } from "Components/components"
+import { GlobalTitle, maxSM, minSM } from "Components/components"
 import { Carousel } from 'antd'
 
 const BertiaPopulerWrap = styled.div`
   padding-bottom: 60px;
+  ${maxSM} {
+    height: 820px;
+  }
 `
 const BertiaPopulerWrapInner = styled.div`
   .ant-carousel {
@@ -47,6 +50,10 @@ const ItemWrap = styled.div`
 `
 const Item = styled.div`
   padding: 20px;
+  ${maxSM} {
+    padding: 0;
+    margin-top: 30px;
+  }
 `
 const TitleItem = styled.h4`
   font-size: 18px;
@@ -78,20 +85,35 @@ const BeritaItem = () => (
   </ItemWrap>
 )
 
+const StyledCol = styled(Col)`
+  ${maxSM} {
+    max-width: 100%;
+  }
+`
+
 const BeritaPopuler = () => {
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 3
+    slidesToScroll: 3,
+    responsive: [
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToScroll: 1,
+          slidesToShow: 1,
+        }
+      }
+    ]
   }
   return (
     <BertiaPopulerWrap>
       <Container xl>
         <BertiaPopulerWrapInner>
           <RowStyled type="flex" align="middle" height={420}>
-            <Col md={8}>
+            <Col sm={24} md={8}>
               <div>
                 <GlobalTitle
                   title="Berita Populer"
@@ -99,7 +121,7 @@ const BeritaPopuler = () => {
                 />
               </div>
             </Col>
-            <Col md={16}>
+            <StyledCol sm={24} md={16}>
               <div>
                 <Carousel {...settings}>
                   <BeritaItem/>
@@ -108,7 +130,7 @@ const BeritaPopuler = () => {
                   <BeritaItem/>
                 </Carousel>
               </div>
-            </Col>
+            </StyledCol>
           </RowStyled>
         </BertiaPopulerWrapInner>
       </Container>

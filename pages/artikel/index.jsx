@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
 import Container from "Components/container"
 import { Row, Col, Carousel, Pagination } from "antd"
+import { globalFetch, host } from "Config/api"
 
 const DetailWrap = styled.div`
 
@@ -33,12 +34,12 @@ const Desc = styled.p`
 const NewsItemWrap = styled.div`
   padding: 30px 0;
 `
-const NewsItem = () => (
+const NewsItem = ({item}) => (
   <NewsItemWrap>
     <Row type="flex" gutter={40} align="middle">
       <Col md={8}>
         <div>
-          <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+          <BackgroundImage src={item.image} height={200}/>
         </div>
       </Col>
       <Col md={16}>
@@ -47,11 +48,15 @@ const NewsItem = () => (
             12 December 2019
           </NewsDate>
           <Title>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+            {item.title}
           </Title>
-          <Desc>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          </Desc>
+          {
+            item.excerpt && (
+              <Desc>
+                {item.excerpt}
+              </Desc>
+            ) 
+          }
         </div>
       </Col>
     </Row>
@@ -61,12 +66,12 @@ const NewsItem = () => (
 const HeroItem = styled.div`
   padding: 10px;
 `
-const HeroItemWrap = () => (
+const HeroItemWrap = ({item}) => (
   <HeroItem>
     <Row type="flex" align="middle" gutter={40}>
       <Col md={12}>
         <div>
-          <BackgroundImage src="/static/mekanisme-sop.jpg" height={400}/>
+          <BackgroundImage src={item.image} height={400}/>
         </div>
       </Col>
       <Col md={12}>
@@ -75,11 +80,15 @@ const HeroItemWrap = () => (
             12 December 2019
           </NewsDate>
           <Title fontSize={38} lineHeight={1.2} marginTop={20}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit
+            {item.title}
           </Title>
-          <Desc fontSize={18} marginTop={35}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Desc>
+          {
+            item.excerpt ? (
+              <Desc fontSize={18} marginTop={35}>
+                {item.excerpt}
+              </Desc>
+            ) : null
+          }
         </div>
       </Col>
     </Row>
@@ -93,16 +102,29 @@ const PaginationWrap = styled.div`
   text-align: center;
 `
 
-const Detail = () => {
+const Artikel = ({data}) => {
   const [heroNews, setHeroNews] = useState(null)
   const [itemNews, setItemNews] = useState(null)
+  const [dataState] = useState(data)
   const heroNewsRef = useRef(null)
   const itemNewsRef = useRef(null)
   
   useEffect(() => {
     setHeroNews(heroNewsRef.current)
     setItemNews(itemNewsRef.current)
-  }, [])
+  })
+
+  const car2 = data[0].data.map(item => (
+    <div>
+      <HeroGalleryItem>
+        <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+      </HeroGalleryItem>
+    </div>
+  ))
+  const car1 = data[0].data.map(item => (
+    <HeroItemWrap item={item} />
+  ))
+  
   return (
     <DetailWrap>
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
@@ -110,68 +132,36 @@ const Detail = () => {
       </GlobalBanner>
       <GlobalContent>
         <Carousel
-            asNavFor={itemNews}
-            dots={false}
-            ref={heroNewsRef}
-          >
-            <HeroItemWrap/>
-            <HeroItemWrap/>
-            <HeroItemWrap/>
-            <HeroItemWrap/>
-            <HeroItemWrap/>
-            <HeroItemWrap/>
-          </Carousel>
-          <Carousel
-            asNavFor={heroNews}
-            ref={itemNewsRef}
-            dots={false}
-            slidesToShow={4}
-            swipeToSlide={true}
-            autoplay={true}
-            speed={8000}
-            autoplaySpeed={2000}
-            cssEase="linear"
-            focusOnSelect={true}
-          >
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-            <div>
-              <HeroGalleryItem>
-                <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
-              </HeroGalleryItem>
-            </div>
-          </Carousel>
+          asNavFor={itemNews}
+          dots={false}
+          ref={heroNewsRef}
+        >
+          {
+            car1
+          }
+        </Carousel>
+        <Carousel
+          asNavFor={heroNews}
+          ref={itemNewsRef}
+          dots={false}
+          slidesToShow={3}
+          swipeToSlide={true}
+          autoplay={true}
+          focusOnSelect={true}
+        >
+          {
+            car2
+          }
+        </Carousel>
       </GlobalContent>
       <div>
         <Container>
           <PopularNews>
-            <NewsItem/>
-            <NewsItem/>
-            <NewsItem/>
-            <NewsItem/>
+            {
+              data[1].data.map(item => (
+                <NewsItem item={item}/>
+              ))
+            }
           </PopularNews>
           <PaginationWrap>
             <Pagination defaultCurrent={1} total={50} />
@@ -182,4 +172,19 @@ const Detail = () => {
   )
 }
 
-export default Detail
+Artikel.getInitialProps = async () => {
+  let data = null
+  const fetchFeatured = fetch(`${host}/api/post/featured`)
+  const fetchAll = fetch(`${host}/api/post`)
+  await globalFetch([
+    fetchFeatured,
+    fetchAll
+  ])
+    .then(_data => {
+      data = _data
+    })
+  return {data: data}
+}
+
+
+export default Artikel

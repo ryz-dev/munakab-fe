@@ -82,14 +82,15 @@ export const GlobalBanner = ({children, ...props}) => (
 const GlobalContentWrap = styled.div`
   margin-top: -60px;
   position: relative;
+  ${({children, ...props}) => ({...props})}
 `
 const _ContentInner = styled.div`
   background: #fff;
   padding: 40px;
   ${({children, ...props}) => ({...props})}
 `
-export const GlobalContent = ({children, padding}) => (
-  <GlobalContentWrap>
+export const GlobalContent = ({children, padding, ...props}) => (
+  <GlobalContentWrap {...props}>
     <Container>
       <_ContentInner padding={padding}>
         {children}
@@ -187,3 +188,16 @@ export const ContentWrap = styled.div`
   max-width: 576px;
   margin: 0 auto;
 `
+
+export const minSM = "@media (min-width: 577.98px)"
+export const minMD = "@media (min-width: 769.98px)"
+export const minLG = "@media (min-width: 993.98px)"
+export const minXL = "@media (min-width: 1201.98px)"
+
+export const maxSM = "@media (max-width: 575.98px)"
+export const maxMD = "@media (max-width: 767.98px)"
+export const maxLG = "@media (max-width: 991.98px)"
+export const maxXL = "@media (max-width: 1199.98px)"
+
+export const media = ({ type = "min", width = 993.98 }) =>
+  `@media (${type}-width: ${width}px)`

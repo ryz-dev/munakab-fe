@@ -195,64 +195,10 @@ const Globalnav = ({data}) => {
                     </Link>
                   </li>
                   <li>
-                    <a href="#">Layanan</a>
+                    <Link href="/pengumuman">
+                      <a>Pengumuman</a>
+                    </Link>
                   </li>
-                  {/* <li>
-                    <Dropdown
-                      title={<span>Profil</span>}
-                      outToggle={outToggle}
-                      setNode={handleNode}
-                    >
-                      <DropdownList>
-                        <li>
-                          <Link href="/tentang">
-                            <a>Tentang</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/sejarah">
-                            <a>Sejarah</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/visi-misi">
-                            <a>Visi dan Misi</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <a href="#">Aset Desa</a>
-                        </li>
-                      </DropdownList>
-                    </Dropdown>
-                  </li>
-                  <li>
-                    <Dropdown
-                      title={<span>OPD</span>}
-                      outToggle={outToggle}
-                      setNode={handleNode}
-                    >
-                      <DropdownList>
-                        <li>
-                          <Link href="/tentang">
-                            <a>Test</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/sejarah">
-                            <a>Sejarah</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/visi-misi">
-                            <a>Visi dan Misi</a>
-                          </Link>
-                        </li>
-                        <li>
-                          <a href="#">Aset Desa</a>
-                        </li>
-                      </DropdownList>
-                    </Dropdown>
-                  </li> */}
                 </Flex>
               </LeftMenu>
               <RightMenu>

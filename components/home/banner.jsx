@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
 import { Carousel } from 'antd'
 import Container from "Components/container"
-import { ButtonStyled } from "Components/components"
+import { ButtonStyled, maxSM } from "Components/components"
 
 const BannerWrap = styled.div`
   .ant-carousel {
@@ -75,6 +75,14 @@ const TextBox = styled.div`
     line-height: 1.4;
     font-size: 24px;
     margin-top: 20px;
+  }
+  ${maxSM} {
+    h1 {
+      font-size: 38px;
+    }
+    p {
+      font-size: 22px;
+    }
   }
 `
 const ButtonStyledBanner = styled(ButtonStyled)`

@@ -3,6 +3,7 @@ import styled from "@emotion/styled"
 import Link from "next/link"
 import { Row, Col } from "antd"
 import Container from "Components/container"
+import { Flex, maxSM } from "Components/components"
 import { globalFetch } from "Config/api"
 
 const GlobalfooterWrap = styled.footer`
@@ -25,105 +26,63 @@ const List = styled.ul`
 		}
 	}
 `
+const FlexStyled = styled(Flex)`
+
+`
 const GNFooter = styled.div`
 	padding: 30px 0;
-	text-align: center;
+`
+const GNLeft = styled.div`
+
+`
+const GNRight = styled.div`
+
+`
+const GNLogo = styled.img`
+	height: 130px;
+	${maxSM} {
+		margin-bottom: 40px;
+	}
 `
 
 const Globalfooter = ({data}) => {
   return (
 		<GlobalfooterWrap>
 			<Container>
-				<Row type="flex">
-					{
-						data && data.data.map(item => (
-							<Col sm={6} xs={24} key={item.id}>
-								<div>
-									<List>
-										<li>
-											<h4>{item.title}</h4>
-										</li>
-										{
-											item.children && item.children.map(itemChild => (
-												<li key={itemChild.id}>
-													<Link href="#">{itemChild.title}</Link>
+				<Row type="flex" justify="between">
+					<Col sm={8}>
+						<GNLogo src="/static/muna.png"/>
+					</Col>
+					<Col sm={16}>
+						<Row type="flex">
+							{
+								data && data.data.map(item => (
+									<Col sm={6} xs={24} key={item.id}>
+										<div>
+											<List>
+												<li>
+													<h4>{item.title}</h4>
 												</li>
-											))
-										}
-									</List>
-								</div>
-							</Col>
-						))
-					}
-					{/* <Col sm={6} xs={24}>
-						<div>
-							<List>
-								<li>
-									<h4>Profil</h4>
-								</li>
-								<li>
-									<a href="#">Tentang</a>
-								</li>
-								<li>
-									<a href="#">Sejarah</a>
-								</li>
-								<li>
-									<a href="#">Visi dan Misi</a>
-								</li>
-								<li>
-									<a href="#">Aset Desa</a>
-								</li>
-							</List>
-						</div>
+												{
+													item.children && item.children.map(itemChild => (
+														<li key={itemChild.id}>
+															<Link href="#">{itemChild.title}</Link>
+														</li>
+													))
+												}
+											</List>
+										</div>
+									</Col>
+								))
+							}
+						</Row>
+						<GNFooter>
+							<div>
+								<span>Copyright 2019. All rights reserved. Kabupaten Muna</span>
+							</div>
+						</GNFooter>
 					</Col>
-					<Col sm={6} xs={24}>
-						<div>
-							<List>
-								<li>
-									<h4>Lemabaga</h4>
-								</li>
-								<li>
-									<a href="#">Beranda</a>
-								</li>
-								<li>
-									<a href="#">Profil</a>
-								</li>
-								<li>
-									<a href="#">OPD</a>
-								</li>
-								<li>
-									<a href="#">Berita</a>
-								</li>
-							</List>
-						</div>
-					</Col>
-					<Col sm={6} xs={24}>
-						<div>
-							<List>
-								<li>
-									<h4>Kontak</h4>
-								</li>
-								<li>
-									<a href="#">Beranda</a>
-								</li>
-								<li>
-									<a href="#">Profil</a>
-								</li>
-								<li>
-									<a href="#">OPD</a>
-								</li>
-								<li>
-									<a href="#">Berita</a>
-								</li>
-							</List>
-						</div>
-					</Col> */}
 				</Row>
-				<GNFooter>
-					<div>
-						<span>Copyright 2019. All rights reserved. Kabupaten Muna</span>
-					</div>
-				</GNFooter>
 			</Container>
 		</GlobalfooterWrap>  
 	)

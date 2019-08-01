@@ -1,7 +1,7 @@
 import { Row, Col, Button } from "antd"
 import Container from "Components/container"
 import styled from "@emotion/styled"
-import { GlobalTitle } from "Components/components"
+import { GlobalTitle, maxSM } from "Components/components"
 
 const AboutWrap = styled.div`
   top: -60px;
@@ -10,6 +10,9 @@ const AboutWrap = styled.div`
 const AboutInner = styled.div`
   padding: 40px;
   background: #fff;
+  ${maxSM} {
+    padding: 20px;
+  }
 `
 
 const Title = styled.h2`
@@ -35,6 +38,9 @@ const ImgBackground = styled.img`
   width: 100%;
   height: 291px;
   object-fit: cover;
+  ${maxSM} {
+    margin-top: 30px;
+  }
 `
 
 const About = () => {
@@ -43,7 +49,7 @@ const About = () => {
       <Container xl>
         <AboutInner>
           <Row type="flex" gutter={40} align="middle">
-            <Col md={12}>
+            <Col sm={24} md={12}>
               <div>
                 <GlobalTitle
                   title="Tentang"
@@ -51,7 +57,7 @@ const About = () => {
                 />
               </div>
             </Col>
-            <Col md={12}>
+            <Col sm={24} md={12}>
               <div>
                 <ImgBackground src="/static/mekanisme-sop.jpg"/>
               </div>
