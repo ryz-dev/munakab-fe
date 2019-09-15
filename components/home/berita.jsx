@@ -2,6 +2,9 @@ import styled from "@emotion/styled"
 import { Row, Col } from "antd"
 import Container from "Components/container"
 import { maxSM, minSM } from "Components/components"
+import Link from "next/link"
+import { globalFetch } from "Config/api"
+import Dotdotdot from 'react-dotdotdot'
 
 const BeritaWrap = styled.div`
   background: #fff;
@@ -19,6 +22,7 @@ const Header = styled.div`
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  height: 110px;
   ${maxSM} {
     display: block;
   }
@@ -38,7 +42,8 @@ const ImgItem = styled.img`
 const List = styled.ul`
   list-style: none;
   li {
-    height: 133px;
+    height: 110px;
+    margin: 10px 0;
     ${maxSM} {
       height: initial;
       padding-bottom: 20px;
@@ -50,13 +55,16 @@ const TitleHero = styled.h2`
 `
 const TitleWrap = styled.div`
   border-bottom: 1px solid #d5d5d5;
-  padding: 40px 0;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  width: 100%;
   ${maxSM} {
     padding: 10px 0;
   }
 `
 const LinkAll = styled.a`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
   color: #727272;
@@ -80,30 +88,35 @@ const BeritaLeft = styled.div`
     margin-top: 30px;
   }
 `
-const ListItem = () => (
+const ListItem = ({item}) => (
   <li>
-    <a href="#">
-      <Flex>
-        <ImgItem src="/static/mekanisme-sop.jpg"/>
-        <TitleWrap>
-          <Title>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          </Title>
-        </TitleWrap>
-      </Flex>
-    </a>
+    <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+      <a>
+        <Flex>
+          <ImgItem src={item.image}/>
+          <TitleWrap>
+            <Title>
+              <Dotdotdot clamp={3}>
+                {item.title}
+              </Dotdotdot>
+            </Title>
+          </TitleWrap>
+        </Flex>
+      </a>
+    </Link>
   </li>
 )
 
-const Berita = () => {
+const Berita = ({data}) => {
+  console.log("berita", data)
   return (
     <BeritaWrap>
       <Container xl>
         <BeritaInner>
-          <Row type="flex" align="middle" gutter={20}>
+          <Row type="flex" align="top" gutter={20}>
             <Col sm={24} md={10}>
               <div>
-                <Maps src="/static/maps.png"/>
+                <iframe src="https://snazzymaps.com/embed/184816?key=AIzaSyBQUGoAI9wzi002U11ZLYDVgVKRBNIdrOo" style={{width: "100%", height: 700, border: "none"}}></iframe>
               </div>
             </Col>
             <Col ms={24} md={14}>
@@ -112,15 +125,20 @@ const Berita = () => {
                   <TitleHero>
                     Berita
                   </TitleHero>
-                  <LinkAll>
-                    Semua
-                  </LinkAll>
+                  <Link href="/artikel">
+                    <a>
+                      <LinkAll>
+                        Semua
+                      </LinkAll>
+                    </a>
+                  </Link>
                 </Header>
                 <List>
-                  <ListItem/>
-                  <ListItem/>
-                  <ListItem/>
-                  <ListItem/>
+                  {
+                    data && data.data.map(item => (
+                      <ListItem item={item}/>
+                    ))
+                  }
                 </List>
               </BeritaLeft>
             </Col>

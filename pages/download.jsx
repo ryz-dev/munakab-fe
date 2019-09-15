@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from "react"
 import styled from "@emotion/styled"
 import Container from "Components/container"
 import { Tabs } from 'antd'
 import { GlobalContent, GlobalBanner, GBHeader, Flex } from "Components/components"
+import { globalFetch } from "Config/api"
 
 const { TabPane } = Tabs;
 
@@ -52,26 +54,33 @@ const ContentTableWrap = styled.div`
     }
   }
 `
-const ContentTable = () => (
+const ContentTable = ({item}) => (
   <ContentTableWrap>
     <table>
-      <tr>
-        <td>File</td>
-        <td>Download</td>
-      </tr>
-      <tr>
-        <td>File</td>
-        <td>Download</td>
-      </tr>
-      <tr>
-        <td>File</td>
-        <td>Download</td>
-      </tr>
+      {
+        item && item.map(item => (
+          <tr>
+            <td>{item.filename}</td>
+            <td style={{paddingRight: 30}}>{item.size}</td>
+            <td><a href={item.path} target="_blank">Download</a></td>
+          </tr>
+        ))
+      }
     </table>
   </ContentTableWrap>
 )
 
 const Download = () => {
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    globalFetch(`/api/download`)
+      .then(data => {
+        setData(data)
+      })
+  }, [])
+
+  console.log(data)
   return (
     <DownloadWrap>
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
@@ -100,24 +109,26 @@ const Download = () => {
           </Sidebar>
         </Flex> */}
         <Content>
-          <Tabs defaultActiveKey="1" onChange={callback} tabPosition="left"
-            tabBarGutter={8}
-            tabBarStyle={{
-              width: 240,
-              textAlign: "left",
-              padding: "40px 0"
-            }}
-          >
-            <TabPane tab="Regulasi" key="1">
-              <ContentTable/>
-            </TabPane>
-            <TabPane tab="Transparansi Anggaran" key="2">
-              <ContentTable/>
-            </TabPane>
-            <TabPane tab="Formulir Layanan Desa" key="3">
-              <ContentTable/>
-            </TabPane>
-          </Tabs>
+          {
+            data && (
+              <Tabs defaultActiveKey="1" onChange={callback} tabPosition="left"
+                tabBarGutter={8}
+                tabBarStyle={{
+                  width: 240,
+                  textAlign: "left",
+                  padding: "40px 0"
+                }}
+              >
+                {
+                  data && data.data.map((item, i) => (
+                    <TabPane tab={item.name} key={i + 1}>
+                      <ContentTable item={item.items}/>
+                    </TabPane>
+                  ))
+                }
+              </Tabs>
+            )
+          }
         </Content>
       </GlobalContent>
     </DownloadWrap>

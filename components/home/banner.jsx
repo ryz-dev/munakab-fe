@@ -74,6 +74,7 @@ const TextBox = styled.div`
   p {
     line-height: 1.4;
     font-size: 24px;
+    color: #fff;
     margin-top: 20px;
   }
   ${maxSM} {

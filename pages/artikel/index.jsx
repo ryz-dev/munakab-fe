@@ -4,6 +4,9 @@ import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/compone
 import Container from "Components/container"
 import { Row, Col, Carousel, Pagination } from "antd"
 import { globalFetch, host } from "Config/api"
+import Link from "next/link"
+import { convertDate } from "Utils"
+import Dotdotdot from 'react-dotdotdot'
 
 const DetailWrap = styled.div`
 
@@ -17,7 +20,7 @@ const NewsDate = styled.div`
   text-transform: uppercase;
   font-weight: bold;
   font-size: 14px;
-  color: #525252;
+  color: #58afff;
   ${({children, ...props}) => ({...props})}
 `
 const Title = styled.h2`
@@ -45,15 +48,23 @@ const NewsItem = ({item}) => (
       <Col md={16}>
         <div>
           <NewsDate>
-            12 December 2019
+            {convertDate(item.created_at)}
           </NewsDate>
-          <Title>
-            {item.title}
-          </Title>
+          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+            <a>
+              <Title>
+                <Dotdotdot clamp={3}>
+                  {item.title}
+                </Dotdotdot>
+              </Title>
+            </a>
+          </Link>
           {
             item.excerpt && (
               <Desc>
-                {item.excerpt}
+                <Dotdotdot clamp={3}>
+                  {item.excerpt}
+                </Dotdotdot>
               </Desc>
             ) 
           }
@@ -77,15 +88,23 @@ const HeroItemWrap = ({item}) => (
       <Col md={12}>
         <div>
           <NewsDate fontSize={18}>
-            12 December 2019
+            {convertDate(item.created_at)}
           </NewsDate>
-          <Title fontSize={38} lineHeight={1.2} marginTop={20}>
-            {item.title}
-          </Title>
+          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+            <a>
+              <Title fontSize={38} lineHeight={1.2} marginTop={20}>
+                <Dotdotdot clamp={3}>
+                  {item.title}
+                </Dotdotdot>
+              </Title>
+            </a>
+          </Link>
           {
             item.excerpt ? (
               <Desc fontSize={18} marginTop={35}>
-                {item.excerpt}
+                <Dotdotdot clamp={3}>
+                  {item.excerpt}
+                </Dotdotdot>
               </Desc>
             ) : null
           }
@@ -102,33 +121,81 @@ const PaginationWrap = styled.div`
   text-align: center;
 `
 
-const Artikel = ({data}) => {
+const BannerContent = styled.div`
+  display: flex;
+  height: 600px;
+  align-items: center;
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  span {
+    font-size: 25px;
+    color: #fff;
+    margin-top: 20px;
+    display: block;
+  }
+  h2 {
+    font-size: 40px;
+    color: #fff;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+`
+
+const Artikel = () => {
   const [heroNews, setHeroNews] = useState(null)
   const [itemNews, setItemNews] = useState(null)
-  const [dataState] = useState(data)
+  const [dataState, setDataState] = useState(null)
+  const [page, setPage] = useState(1)
+
   const heroNewsRef = useRef(null)
   const itemNewsRef = useRef(null)
   
   useEffect(() => {
     setHeroNews(heroNewsRef.current)
     setItemNews(itemNewsRef.current)
-  })
+  }, [])
 
-  const car2 = data[0].data.map(item => (
+  useEffect(() => {
+    const fetchFeatured = fetch(`${host}/api/post/featured`)
+    const fetchAll = fetch(`${host}/api/post?page=${page}&limit=6`)
+
+    globalFetch([
+      fetchFeatured,
+      fetchAll
+    ])
+      .then(_data => {
+        setDataState(_data)
+      })
+  }, [page])
+
+  const car2 = dataState && dataState[0].data.map(item => (
     <div>
       <HeroGalleryItem>
-        <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+        <BackgroundImage src={item.image} height={200}/>
       </HeroGalleryItem>
     </div>
   ))
-  const car1 = data[0].data.map(item => (
+
+  const car1 = dataState && dataState[0].data.map(item => (
     <HeroItemWrap item={item} />
   ))
+
+  const handleChangePage = value => {
+    setPage(value)
+  }
+
+  const berita = dataState && dataState[1]
   
   return (
     <DetailWrap>
-      <GlobalBanner bg="/static/mekanisme-sop.jpg">
-        adsf
+      <GlobalBanner bg="/static/mekanisme-sop.jpg" height={600}>
+        <BannerContent>
+          <div>
+            <h2>Informasi</h2>
+            <span>Berisikan informasi seputar kab. Muna</span>
+          </div>
+        </BannerContent>
       </GlobalBanner>
       <GlobalContent>
         <Carousel
@@ -158,13 +225,13 @@ const Artikel = ({data}) => {
         <Container>
           <PopularNews>
             {
-              data[1].data.map(item => (
+              berita && berita.data.map(item => (
                 <NewsItem item={item}/>
               ))
             }
           </PopularNews>
           <PaginationWrap>
-            <Pagination defaultCurrent={1} total={50} />
+            <Pagination onChange={handleChangePage} defaultCurrent={page} pageSize={6} total={berita && berita.pagination.total}/>
           </PaginationWrap>
         </Container>
       </div>
@@ -172,19 +239,19 @@ const Artikel = ({data}) => {
   )
 }
 
-Artikel.getInitialProps = async () => {
-  let data = null
-  const fetchFeatured = fetch(`${host}/api/post/featured`)
-  const fetchAll = fetch(`${host}/api/post`)
-  await globalFetch([
-    fetchFeatured,
-    fetchAll
-  ])
-    .then(_data => {
-      data = _data
-    })
-  return {data: data}
-}
+// Artikel.getInitialProps = async () => {
+//   let data = null
+//   const fetchFeatured = fetch(`${host}/api/post/featured`)
+//   const fetchAll = fetch(`${host}/api/post`)
+//   await globalFetch([
+//     fetchFeatured,
+//     fetchAll
+//   ])
+//     .then(_data => {
+//       data = _data
+//     })
+//   return {data: data}
+// }
 
 
 export default Artikel

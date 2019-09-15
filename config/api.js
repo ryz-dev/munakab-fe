@@ -17,7 +17,7 @@ export const globalFetch = path => {
 
   } else {
     return new Promise((resolve, reject) => {
-      fetch(path)
+      fetch(`${host}${path}`)
         .then(res => {
           if (!res.ok) {
             reject(res.statusText)
@@ -32,4 +32,25 @@ export const globalFetch = path => {
         })
     })
   }
+}
+
+export const globalPost = (path, data) => {
+  return new Promise((resolve, reject) => {
+    fetch(`${host}${path}`, {
+      method: "POST",
+      body: data
+    })
+      .then(res => {
+        if (!res.ok) {
+          reject(res.statusText)
+        }
+        return res.json()
+      })
+      .then(data => {
+        resolve(data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }

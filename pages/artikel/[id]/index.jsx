@@ -2,6 +2,9 @@ import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
 import Container from "Components/container"
 import { Row, Col } from "antd"
+import { globalFetch, host } from "Config/api"
+import Link from "next/link"
+import { convertDate } from "Utils"
 
 const DetailWrap = styled.div`
 
@@ -32,17 +35,21 @@ const NewsItemWrap = styled.div`
 const TextWrap = styled.div`
   margin-top: 20px;
 `
-const NewsItem = () => (
+const NewsItem = ({item}) => (
   <NewsItemWrap>
     <div>
-      <BackgroundImage src="/static/mekanisme-sop.jpg" height={200}/>
+      <BackgroundImage src={item.image} height={200}/>
     </div>
     <TextWrap>
-      <Title color="#fff" fontWeight="normal">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
-      </Title>
+      <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+        <a>
+          <Title color="#fff" fontWeight="normal">
+            {item.title}
+          </Title>
+        </a>
+      </Link>
       <NewsDate marginTop={20}>
-        12 December 2019
+        {convertDate(item.created_at)}
       </NewsDate>
     </TextWrap>
   </NewsItemWrap>
@@ -79,6 +86,7 @@ const Share = styled.div`
 const RelatedWrap = styled.div`
   background: #091A43;
   margin-top: -60px;
+  margin-bottom: -60px;
 `
 const RelatedInner = styled.div`
   padding: 100px 0;
@@ -90,7 +98,8 @@ const RelatedTitle = styled.h4`
   margin-top: 20px;
 `
 
-const Detail = () => {
+const Detail = ({data, related}) => {
+  console.log(related, data)
   return (
     <DetailWrap>
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
@@ -99,13 +108,13 @@ const Detail = () => {
       <GlobalContent>
         <CointentWrap>
           <Title fontSize={28} lineHeight={1.4}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+            {data.title}
           </Title>
-          <BackgroundImage src="/static/mekanisme-sop.jpg" marginTop={20}/>
+          <BackgroundImage marginTop={60} src={data.image} marginTop={20}/>
           <Flex marginTop={20}>
             <Flex>
-              <AuhtorName>Muhammad Rusdi</AuhtorName>
-              <AuthroDate>12 Desember 2019</AuthroDate>
+              <AuhtorName>{data.author}</AuhtorName>
+              <AuthroDate>{convertDate(data.created_at)}</AuthroDate>
             </Flex>
             <Share>
               <span>
@@ -127,39 +136,42 @@ const Detail = () => {
               </span>
             </Share>
           </Flex>
-          <ContentInner>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </ContentInner>
+          <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/>
         </CointentWrap>
       </GlobalContent>
-      <RelatedWrap>
-        <Container>
-          <RelatedInner>
-            <RelatedTitle>Berita Terkait</RelatedTitle>
-            <Row type="flex" gutter={40}>
-              <Col md={8}>
-                <NewsItem/>
-              </Col>
-              <Col md={8}>
-                <NewsItem/>
-              </Col>
-              <Col md={8}>
-                <NewsItem/>
-              </Col>
-            </Row>
-          </RelatedInner>
-        </Container>
-      </RelatedWrap>
+      {
+        related.length ? (
+          <RelatedWrap>
+            <Container>
+              <RelatedInner>
+                <RelatedTitle>Berita Terkait</RelatedTitle>
+                <Row type="flex" gutter={40}>
+                  {
+                    related.map(item => (
+                      <Col md={8}>
+                        <NewsItem item={item}/>
+                      </Col>
+                    ))
+                  }
+                </Row>
+              </RelatedInner>
+            </Container>
+          </RelatedWrap>
+        ) : null
+      }
     </DetailWrap>
   )
+}
+
+Detail.getInitialProps = async ({query}) => {
+  const fetchArtikel = fetch(`${host}/api/post/read?slug=${query.id}`)
+  const fetchRelated = fetch(`${host}/api/post/related?slug=${query.id}`)
+  const data = await globalFetch([fetchArtikel, fetchRelated])
+  
+  return {
+    data: data[0].data,
+    related: data[1].data
+  }
 }
 
 export default Detail

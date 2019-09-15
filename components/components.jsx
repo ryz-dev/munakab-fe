@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { Button } from "antd"
+import Link from "next/link"
 import Container from "Components/container"
 
 const Title = styled.h2`
@@ -30,7 +31,7 @@ const GlobalTitleWrap = styled.div`
   ${({children, ...props}) => ({...props})}
 `
 
-export const GlobalTitle = ({title, desc, link, color, button}) => (
+export const GlobalTitle = ({title, desc, link = "/", color, button}) => (
   <GlobalTitleWrap>
     <Title color={color}>
       {title}
@@ -38,9 +39,13 @@ export const GlobalTitle = ({title, desc, link, color, button}) => (
     <Desc color={color}>
       {desc}
     </Desc>
-    <ButtonStyled {...button}>
-      Selengkpanya
-    </ButtonStyled>
+    <Link href={link}>
+      <a>
+        <ButtonStyled {...button}>
+          Selengkpanya
+        </ButtonStyled>
+      </a>
+    </Link>
   </GlobalTitleWrap>
 )
 
@@ -53,9 +58,9 @@ const GlobalBannerWrap = styled.div`
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: 0;
     content: "";
     background: rgba(0,0,0,.5);
+    z-index: -1;
   }
   &:before {
     position: absolute;
@@ -64,9 +69,9 @@ const GlobalBannerWrap = styled.div`
     top: 0;
     bottom: 0;
     content: "";
-    z-index: 0;
     background: ${({bg}) => `url('${bg}')`};
     background-size: cover;
+    z-index: -1;
   }
   ${({children, ...props}) => ({...props})}
 `

@@ -3,6 +3,9 @@ import { Row, Col } from "antd"
 import Container from "Components/container"
 import { GlobalTitle, maxSM, minSM } from "Components/components"
 import { Carousel } from 'antd'
+import { convertDate } from "Utils"
+import Link from "next/link"
+import Dotdotdot from 'react-dotdotdot'
 
 const BertiaPopulerWrap = styled.div`
   padding-bottom: 60px;
@@ -65,19 +68,25 @@ const Date = styled.p`
   margin-top: 10px;
   text-transform: uppercase;
 `
-const BeritaItem = () => (
+const BeritaItem = ({item}) => (
   <ItemWrap>
     <Item>
       <div>
         <div>
-          <Img src="/static/mekanisme-sop.jpg"/>
+          <Img src={item.image}/>
         </div>
         <div>
-          <TitleItem>
-            Lorem ipsum dolor sit amet, consectetur adipiscing
-          </TitleItem>
+          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+            <a>
+              <TitleItem>
+                <Dotdotdot clamp={3}>
+                  {item.title}
+                </Dotdotdot>
+              </TitleItem>
+            </a>
+          </Link>
           <Date>
-            12 Desember 2018
+            {convertDate(item.created_at)}
           </Date>
         </div>
       </div>
@@ -91,7 +100,7 @@ const StyledCol = styled(Col)`
   }
 `
 
-const BeritaPopuler = () => {
+const BeritaPopuler = ({data}) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -117,6 +126,7 @@ const BeritaPopuler = () => {
               <div>
                 <GlobalTitle
                   title="Berita Populer"
+                  link="/artikel"
                   desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
                 />
               </div>
@@ -124,10 +134,11 @@ const BeritaPopuler = () => {
             <StyledCol sm={24} md={16}>
               <div>
                 <Carousel {...settings}>
-                  <BeritaItem/>
-                  <BeritaItem/>
-                  <BeritaItem/>
-                  <BeritaItem/>
+                  {
+                    data && data.data.map(item => (
+                      <BeritaItem item={item}/>
+                    ))
+                  }
                 </Carousel>
               </div>
             </StyledCol>

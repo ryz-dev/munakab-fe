@@ -1,7 +1,17 @@
+import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, Flex, GBHeader } from "Components/components"
 import Container from "Components/container"
 import { Row, Col, Pagination } from "antd"
+import { globalFetch } from "Config/api"
+import Link from "next/link"
+import dayjs from "dayjs"
+import AdvancedFormat from 'dayjs/plugin/advancedFormat'
+import LocalizedFormat from 'dayjs/plugin/localizedFormat'
+import Dotdotdot from 'react-dotdotdot'
+
+dayjs.extend(LocalizedFormat)
+dayjs.extend(AdvancedFormat)
 
 const PengumumanWrap = styled.div`
   padding-bottom: 100px;
@@ -43,19 +53,27 @@ const DateMonth = styled.span`
 const TextWrap = styled.div`
 
 `
-const ListItem = () => (
+const ListItem = ({item}) => (
   <ListItemWrap>
     <Flex justifyContent="initial">
       <Date>
         <DateDay>
-          19
+          {dayjs(item.created_at).date()}
         </DateDay>
         <DateMonth>
-          Sep
+          {dayjs(item.created_at).format('MMMM').split("").filter((item, i) => {
+            return i < 3 ? item : null
+          }).join("")}
         </DateMonth>
       </Date>
       <TextWrap>
-        <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</h4>
+        <Link href="pengumuman/[id]" as={`pengumuman/${item.slug}`}>
+          <a>
+            <Dotdotdot clamp={3}>
+              <h4>{item.title}</h4>
+            </Dotdotdot>
+          </a>
+        </Link>
       </TextWrap>
     </Flex>
   </ListItemWrap>
@@ -68,7 +86,26 @@ const PaginationWrap = styled.div`
   text-align: center;
 `
 
+const TodayWrap = styled.div`
+  margin-top: 20px;
+`
+
 const Pengumuman = () => {
+  const [data, setData] = useState(null)
+  const [today, setToday] = useState([])
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    globalFetch(`/api/pengumuman?limit=6&page=${page}`)
+      .then(data => {
+        setData(data)
+      })
+  }, [page])
+
+  const handleChangePage = value => {
+    setPage(value)
+  }
+  
   return (
     <PengumumanWrap>
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
@@ -81,10 +118,15 @@ const Pengumuman = () => {
         <CointentWrap>
           <Title>Hari ini</Title>
           <List>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
+            {
+              data ? data.data.map(item => {
+                return dayjs(item.created_at).date() === dayjs(dayjs()).date() ? <ListItem item={item}/> : null
+              }): (
+                <TodayWrap>
+                  <div>Tidak ada pengumuman hari ini.</div>
+                </TodayWrap>
+              )
+            }
           </List>
         </CointentWrap>
       </GlobalContent>
@@ -92,13 +134,14 @@ const Pengumuman = () => {
         <CointentWrap>
           <Title>History</Title>
           <List>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
+            {
+              data && data.data.map(item => {
+                return dayjs(item.created_at).date() !== dayjs(dayjs()).date() ? <ListItem item={item}/> : null
+              })
+            }
           </List>
           <PaginationWrap>
-            <Pagination defaultCurrent={1} total={50} />
+            {/* <Pagination defaultCurrent={1} onChange={handleChangePage} total={data && data.pagination.total} pageSize={6} /> */}
           </PaginationWrap>
         </CointentWrap>
       </GlobalContent>

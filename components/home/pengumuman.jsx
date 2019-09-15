@@ -1,7 +1,14 @@
+import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import Container from "Components/container"
+import Link from "next/link"
 import { Row, Col } from "antd"
 import { GlobalTitle, maxSM } from "Components/components"
+import { globalFetch } from "Config/api"
+import Dotdotdot from 'react-dotdotdot'
+import dayjs from "dayjs"
+import AdvancedFormat from 'dayjs/plugin/advancedFormat'
+import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 
 const AnnauncementWrap = styled.div`
   padding: 60px 0 150px 0;
@@ -22,6 +29,7 @@ const Flex = styled.div`
 const ImgItem = styled.div`
   width: 88px;
   height: 88px;
+  flex: none;
   margin-right: 30px;
   display: flex;
   justify-content: center;
@@ -52,6 +60,11 @@ const List = styled.ul`
   background: #f8f8f8;
   li {
     height: 133px;
+    &:last-of-type {
+      ${TitleWrap} {
+        border: none;
+      }
+    }
   }
   ${maxSM} {
     margin-top: 40px;
@@ -61,25 +74,34 @@ const List = styled.ul`
     }
   }
 `
-const ListItem = () => (
+
+const ListItem = ({item}) => (
   <li>
-    <a href="#">
-      <Flex>
-        <ImgItem>
-          <div>
-            <h5>
-              12
-            </h5>
-            <span>Sep</span>
-          </div>
-        </ImgItem>
-        <TitleWrap>
-          <Title>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          </Title>
-        </TitleWrap>
-      </Flex>
-    </a>
+   <Link href="pengumuman/[id]" as={`pengumuman/${item.slug}`}>
+      <a>
+        <Flex>
+          <ImgItem>
+            <div>
+              <h5>
+                {dayjs(item.created_at).date()}
+              </h5>
+              <span>
+                {dayjs(item.created_at).format('MMMM').split("").filter((item, i) => {
+                  return i < 3 ? item : null
+                }).join("")}
+              </span>
+            </div>
+          </ImgItem>
+          <TitleWrap>
+            <Title>
+              <Dotdotdot clamp={3}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              </Dotdotdot>
+            </Title>
+          </TitleWrap>
+        </Flex>
+      </a>
+    </Link>
   </li>
 )
 
@@ -90,15 +112,25 @@ const StyledCol = styled(Col)`
 `
 
 const Annauncement = () => {
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    globalFetch(`/api/pengumuman?limit=3&page=1`)
+      .then(data => {
+        setData(data)
+      })
+  }, [])
+
   return (
     <AnnauncementWrap>
       <Container xl>
-        <Row type="flex" align="middle">
+        <Row type="flex" align="middle" gutter={20}>
           <Col sm={24} md={8}>
             <div>
               <GlobalTitle
                 title="Pengumuman"
                 desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor"
+                link="/pengumuman"
                 button={{
                   border: `1px solid #f5b723`,
                   color: `#f5b723`
@@ -109,9 +141,9 @@ const Annauncement = () => {
           <StyledCol sm={24} md={16}>
             <div>
               <List>
-                <ListItem/>
-                <ListItem/>
-                <ListItem/>
+                {data && data.data.map(item => (
+                  <ListItem item={item}/>
+                ))}
               </List>
             </div>
           </StyledCol>

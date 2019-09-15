@@ -72,7 +72,7 @@ const Gallery = () => {
   return (
     <GalleryWrap>
       <Container xl>
-        <Row type="flex" align="middle">
+        <Row type="flex" align="middle" gutter={20}>
           <Col sm={24} md={8}>
             <div>
               <GlobalTitle

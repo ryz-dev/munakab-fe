@@ -11,7 +11,7 @@ const Nav = styled.nav`
   left: 0;
   right: 0;
   top: 0;
-  z-index: 9999999;
+  z-index: 999;
   a, span {
     color: #373838;
     cursor: pointer;
@@ -173,7 +173,11 @@ const Globalnav = ({data}) => {
               <LeftMenu>
                 <Flex>
                   <LogoMenu>
-                    <Logo src="/static/muna.png"/>
+                    <Link href="/">
+                      <a>
+                        <Logo src="/static/muna.png"/>
+                      </a>
+                    </Link>
                   </LogoMenu>
                   {/* {
                     data.data.map(item => (
@@ -185,11 +189,6 @@ const Globalnav = ({data}) => {
                     ))
                   } */}
                   <li>
-                    <Link href="/">
-                      <a>Beranda</a>
-                    </Link>
-                  </li>
-                  <li>
                     <Link href="/artikel">
                       <a>Informasi</a>
                     </Link>
@@ -197,6 +196,11 @@ const Globalnav = ({data}) => {
                   <li>
                     <Link href="/pengumuman">
                       <a>Pengumuman</a>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/pengaduan">
+                      <a>Pengaduan</a>
                     </Link>
                   </li>
                 </Flex>

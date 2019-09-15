@@ -3,6 +3,9 @@ import App, { Container } from "next/app"
 import Layout from "Components/layout"
 import { globalFetch, host } from "Config/api"
 import "isomorphic-unfetch"
+import Router from "next/router"
+import NProgress from "nprogress"
+import "nprogress/nprogress.css"
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -37,6 +40,15 @@ class MyApp extends App {
     this.state = {
       data: props.data
     }
+  }
+
+  componentDidMount() {
+    Router.events.on('routeChangeStart', () => {
+      NProgress.start()
+    })
+    Router.events.on('routeChangeComplete', () => {
+      NProgress.done()
+    })
   }
 
   render() {

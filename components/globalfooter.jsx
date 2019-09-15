@@ -10,6 +10,7 @@ const GlobalfooterWrap = styled.footer`
 	padding: 40px 0; 
 	background: #fff;
 	color: #727272;
+	margin-top: 60px;
 `
 const List = styled.ul`
 	padding: 0;
@@ -45,13 +46,22 @@ const GNLogo = styled.img`
 	}
 `
 
+const Networks = styled.div`
+	display: flex;
+`
+
 const Globalfooter = ({data}) => {
   return (
 		<GlobalfooterWrap>
 			<Container>
-				<Row type="flex" justify="between">
+				<Row type="flex" justify="between" gutter={20}>
 					<Col sm={8}>
-						<GNLogo src="/static/muna.png"/>
+						<div>
+							<GNLogo src="/static/muna.png"/>
+							{/* <Networks>
+
+							</Networks> */}
+						</div>
 					</Col>
 					<Col sm={16}>
 						<Row type="flex">

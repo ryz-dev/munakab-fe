@@ -23,8 +23,8 @@ const Home = ({data}) => {
     <>
       <Banner data={data[0]}/>
       <About/>
-      <BeritaPopuler/>
-      <Berita/>
+      <BeritaPopuler data={data[1]}/>
+      <Berita data={data[2]}/>
       <Announcement/>
       <Gallery/>
       <Pengaduan/>
@@ -32,16 +32,22 @@ const Home = ({data}) => {
   )
 }
 
-Home.getInitialProps = async ({ req }) => {
-  let data = null
+Home.getInitialProps = async () => {
   const fetchBanner = fetch(`${host}/api/slider`)
+  const fetchBeritaFeatured = fetch(`${host}/api/post/featured?page=1&limit=5`)
+  const fetchBerita = fetch(`${host}/api/post?page=1&limit=5`)
+
+  let datas = null
   await globalFetch([
-    fetchBanner
+    fetchBanner,
+    fetchBeritaFeatured,
+    fetchBerita
   ])
-    .then(_data => {
-      data = _data
-    })
-  return {data: data}
+  .then(data => {
+    datas = data
+  })
+
+  return {data: datas}
 }
 
 export default Home

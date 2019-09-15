@@ -1,7 +1,9 @@
+import React, { useState } from "react"
 import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, Flex, GBHeader } from "Components/components"
 import Container from "Components/container"
-import { Row, Col, Form, Input, Button } from "antd"
+import { Row, Col, Form, Input, Button, Modal, message } from "antd"
+import { globalPost, host } from "Config/api"
 
 const PengaduanWrap = styled.div`
   padding-bottom: 100px;
@@ -92,6 +94,9 @@ const HeroContentDesc = styled.div`
 `
 
 const Pengaduan = ({form}) => {
+  const [loading, setLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -107,9 +112,35 @@ const Pengaduan = ({form}) => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    form.validateFields(err => {
+    form.validateFields((err, values) => {
       if (!err) {
-        console.info('success');
+        setLoading(true)
+        console.info('success', values);
+        const formData = new FormData()
+        formData.append("informer_name", values.informer_name)
+        formData.append("informer_address", values.informer_address)
+        formData.append("informer_email", values.informer_email)
+        formData.append("informer_phone", values.informer_phone)
+        formData.append("suspect_name", values.suspect_name)
+        formData.append("suspect_department", values.suspect_department)
+        formData.append("suspect_division", values.suspect_division)
+        formData.append("subject", values.subject)
+        formData.append("complaint", values.complaint)
+        globalPost("/api/message/pengaduan", formData)
+          .then(data => {
+            setLoading(false)
+            if (data.diagnostic.code === 200) {
+              Modal.success({
+                title: "Pengiriman Pengaduan Berhasil",
+                content: "Terima kasih telah melakukan pengaudan kepada kami."
+              })
+              form.resetFields()
+            }
+          })
+          .catch(err => {
+            message.error(`Terjadi kesalahan dalam pengaduan - ${err}`)
+            setLoading(false)
+          })
       }
     })
   }
@@ -243,10 +274,10 @@ const Pengaduan = ({form}) => {
                         message: 'Masukkan Pengaduan',
                       },
                     ],
-                  })(<Input/>)}
+                  })(<Input.TextArea/>)}
                 </Form.Item>
                 <Form.Item wrapperCol={{...formItemLayout.wrapperCol, offset: 8}}>
-                  <Button type="primary" htmlType="submit">Kirim</Button>
+                  <Button type="primary" loading={loading} htmlType="submit">{loading ? "Menigirim" : "Kirim"}</Button>
                 </Form.Item>
               </FormItemWrap>
             </FormSection>
@@ -257,4 +288,4 @@ const Pengaduan = ({form}) => {
   )
 }
 
-export default Form.create({name: "coordinated"})(Pengaduan)
+export default Form.create({name: "pengaduan"})(Pengaduan)
