@@ -18,6 +18,7 @@ export default class MyDocument extends Document {
             content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, shrink-to-fit=no, user-scalable=no"
           />
           <link href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.19.8/antd.min.css" rel="stylesheet" />
+          <link rel="shortcut icon" type="image/x-icon" href="/static/muna.png" />
         </Head>
         <body>
           <Main />

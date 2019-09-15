@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react"
 import styled from "@emotion/styled"
-import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
+import { GlobalBanner, GlobalContent, BackgroundImage, maxSM } from "Components/components"
 import Container from "Components/container"
 import { Row, Col, Carousel, Pagination } from "antd"
 import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
+import Dotdotdot from 'react-dotdotdot'
+import { NextSeo } from "next-seo"
 
 const OPDWrap = styled.div``
 
 const OPDContent = styled.div`
   background: #fff;
   padding: 20px 40px;
-  margin-top: 20px;
+  margin-top: 60px;
   position: relative;
   padding: 60px 0;
 `
@@ -46,12 +48,20 @@ const BCLeft = styled.div`
 const Quote = styled.div`
   padding: 0 30px;
   border-left: 2px solid #e8e8e8;
+  ${maxSM} {
+    padding: 0;
+    border-left: none;
+    margin-top: 30px;
+  }
 `
 const Author = styled.div`
   padding: 0 30px;
   display: flex;
   align-items: center;
   margin-top: 20px;
+  ${maxSM} {
+    padding: 0;
+  }
 `
 const AuthorProfile = styled.img`
   width: 40px;
@@ -117,10 +127,12 @@ const NewsItem = ({item}) => (
       <BackgroundImage src={item.image} height={200}/>
     </div>
     <TextWrap>
-      <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+      <Link href="/artikel/[id]" as={`/artikel/${item.slug}`}>
         <a>
           <Title color="#fff" fontWeight="normal">
-            {item.title}
+            <Dotdotdot clamp={3}>
+              {item.title}
+            </Dotdotdot>
           </Title>
         </a>
       </Link>
@@ -157,6 +169,23 @@ const OPD = ({data}) => {
 
   return (
     <OPDWrap>
+      <NextSeo
+        title={data.title}
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: data.welcome_message,
+          images: [
+            {
+              url: '/static/muna.png',
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg" height={600}>
         <BannerContent>
           <div>
@@ -205,14 +234,14 @@ const OPD = ({data}) => {
         </Container>
       </div>
       {
-        related ? (
+        related && related.data ? (
           <RelatedWrap>
             <Container>
               <RelatedInner>
                 <RelatedTitle>Berita Terkait</RelatedTitle>
                 <Row type="flex" gutter={40}>
                   {
-                    related.data.map(item => (
+                    related.data && related.data.map(item => (
                       <Col md={8}>
                         <NewsItem item={item}/>
                       </Col>

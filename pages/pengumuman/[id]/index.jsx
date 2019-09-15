@@ -5,6 +5,7 @@ import { Row, Col } from "antd"
 import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
+import { NextSeo } from "next-seo"
 
 const DetailWrap = styled.div`
 
@@ -101,9 +102,25 @@ const RelatedTitle = styled.h4`
 `
 
 const Detail = ({data}) => {
-  console.log(data)
   return (
     <DetailWrap>
+      <NextSeo
+        title={data.title}
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: 'Web Portal Kab. Muna',
+          images: [
+            {
+              url: data.image,
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
         
       </GlobalBanner>

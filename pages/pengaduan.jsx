@@ -4,6 +4,8 @@ import { GlobalBanner, GlobalContent, Flex, GBHeader } from "Components/componen
 import Container from "Components/container"
 import { Row, Col, Form, Input, Button, Modal, message } from "antd"
 import { globalPost, host } from "Config/api"
+import { NextSeo } from "next-seo"
+import { maxSM } from "Components/components"
 
 const PengaduanWrap = styled.div`
   padding-bottom: 100px;
@@ -91,6 +93,11 @@ const FormItemWrap = styled.div`
 const HeroContentDesc = styled.div`
   padding-left: 60px;
   border-left: 1px solid #e8e8e8;
+  ${maxSM} {
+    padding-left: 0;
+    border-left: none;
+    margin-top: 30px;
+  }
 `
 
 const Pengaduan = ({form}) => {
@@ -147,6 +154,23 @@ const Pengaduan = ({form}) => {
 
   return (
     <PengaduanWrap>
+      <NextSeo
+        title="Pengaduan"
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: 'Web Portal Kab. Muna',
+          images: [
+            {
+              url: '/static/muna.png',
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
         <GBHeader
           title="Pengaduan"

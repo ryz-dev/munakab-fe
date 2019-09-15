@@ -9,6 +9,7 @@ import dayjs from "dayjs"
 import AdvancedFormat from 'dayjs/plugin/advancedFormat'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import Dotdotdot from 'react-dotdotdot'
+import { NextSeo } from "next-seo"
 
 dayjs.extend(LocalizedFormat)
 dayjs.extend(AdvancedFormat)
@@ -24,13 +25,6 @@ const Title = styled.h3`
   font-size: 34px;
   font-weight: bold;
 `
-const List = styled.ul`
-  list-style: none;
-  margin-top: 24px;
-`
-const ListItemWrap = styled.li`
-  padding: 10px 0;
-`
 const Date = styled.div`
   height: 85px;
   width: 85px;
@@ -38,6 +32,23 @@ const Date = styled.div`
   border: 1px solid #e8c23b;
   flex: none;
   text-align: center;
+`
+const List = styled.ul`
+  list-style: none;
+  margin-top: 24px;
+`
+const ListItemWrap = styled.li`
+  padding: 10px 0;
+  a {
+    h4 {
+      transition: all .3s ease;
+    }
+    &:hover {
+      h4 {
+        font-weight: 600;
+      }
+    }
+  }
 `
 const DateDay = styled.span`
   font-size: 34px;
@@ -108,6 +119,23 @@ const Pengumuman = () => {
   
   return (
     <PengumumanWrap>
+      <NextSeo
+        title="Pengumuman"
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: 'Web Portal Kab. Muna',
+          images: [
+            {
+              url: '/static/muna.png',
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
         <GBHeader
           title="Pengumuman"

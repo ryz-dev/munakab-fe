@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from "react"
 import styled from "@emotion/styled"
+import { css } from "@emotion/core"
 import Link from "next/link"
 import Router from "next/router"
 import Container from "Components/container"
 import { Row, Col } from "antd"
 import { Dropdown } from "Components/components"
+import { maxSM } from "Components/components"
 
 const Nav = styled.nav`
   position: absolute;
@@ -19,10 +21,19 @@ const Nav = styled.nav`
     font-weight: bold;
     padding: 20px;
   }
+  a {
+    transition: all .3s ease;
+    &:hover {
+      opacity: .6;
+    }
+  }
 `
 const NavInner = styled.div`
   background: #fff;
   padding: 0 20px;
+  ${maxSM} {
+    padding: 0;
+  }
 `
 
 const Flex = styled.ul`
@@ -34,7 +45,7 @@ const Flex = styled.ul`
     display: block;
     ul {
       li {
-        padding: 10px 0;
+        padding: 6px 0;
       }
     }
   }
@@ -69,8 +80,9 @@ const RightMenu = styled.li`
 `
 const LogoMenu = styled.li`
   padding: 0 10px;
-  @media (max-width: 576px) {
+  ${maxSM} {
     position: absolute;
+    z-index: 99;
     flex: none;
     top: 0;
     padding: 0;
@@ -89,16 +101,21 @@ const NavMenu = styled.div`
   padding: 0 30px;
   height: ${({toggle, self}) => toggle ? self.current.scrollHeight : 0}px;
   overflow: hidden;
-  @media (max-width: 576px) {
-    display: none;
+  ${maxSM} {
+    padding: 0;
   }
   ul {
     list-style: none;
     padding: 20px 0;
+    ${maxSM} {
+      padding: 0;
+    }
     li {
       padding: 10px 0;
       a {
         color: #333;
+        padding: 0 20px;
+        display: inline-block;
       }
     }
   }
@@ -120,6 +137,11 @@ const MenuToggle = styled.div`
   cursor: pointer;
   border-right: 1px solid #e8e8e8;
   margin-right: 5px;
+  /* ${maxSM} {
+    position: absolute;
+    top: 16px;
+    right: 12px;
+  } */
   /* position: absolute;
   right: 30px;
   top: 18px;
@@ -130,6 +152,10 @@ const MenuToggle = styled.div`
 `
 const RowStyled = styled(Row)`
   border-top: 1px solid #eaeaea;
+  ${maxSM} {
+    margin-top: 20px;
+    padding-top: 20px;
+  }
 `
 const DropdownList = styled.ul`
   list-style: none;
@@ -206,10 +232,24 @@ const Globalnav = ({data}) => {
                 </Flex>
               </LeftMenu>
               <RightMenu>
-                <Flex justifyContent="flex-end">
-                  <li>
+                <Flex justifyContent="flex-end" css={css`
+                  ${maxSM} {
+                    position: absolute;
+                    top: 12px;
+                    left: 26px;
+                    display: flex;
+                    right: 24px;
+                    justify-content: flex-end;
+                  }
+                `}>
+                  <li css={css`
+                    ${maxSM} {
+                      position: absolute;
+                      left: 0;
+                    }
+                  `}>
                     <MenuToggle onClick={handleClickToggleMenu}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     </MenuToggle>
                   </li>
                   <li>
@@ -222,7 +262,11 @@ const Globalnav = ({data}) => {
                       <svg role="img" width="24px" height="24px" fill="#40a9ff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter icon</title><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg>
                     </a>
                   </li>
-                  <li>
+                  <li css={css`
+                    ${maxSM} {
+                      display: none;
+                    }
+                  `}>
                     <a href="#">Info</a>
                   </li>
                 </Flex>

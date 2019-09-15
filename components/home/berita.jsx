@@ -25,6 +25,7 @@ const Flex = styled.div`
   height: 110px;
   ${maxSM} {
     display: block;
+    height: initial;
   }
 `
 const ImgItem = styled.img`
@@ -32,6 +33,9 @@ const ImgItem = styled.img`
   object-fit: cover;
   margin-right: 30px;
   width: 88px;
+  border: 1px solid transparent;
+  transition: all .3s ease;
+  box-sizing: border-box;
   ${maxSM} {
     width: 100%;
     margin: 0;
@@ -44,6 +48,16 @@ const List = styled.ul`
   li {
     height: 110px;
     margin: 10px 0;
+    ${maxSM} {
+      height: initial;
+    }
+    a {
+      &:hover {
+        ${ImgItem} {
+          border: 4px solid #1d9fff;
+        }
+      }
+    }
     ${maxSM} {
       height: initial;
       padding-bottom: 20px;
@@ -107,6 +121,17 @@ const ListItem = ({item}) => (
   </li>
 )
 
+const MapsWrap = styled.div`
+ iframe {
+  width: 100%;
+  height: 700px;
+  border: none;
+  ${maxSM} {
+    height: 400px;
+  }
+ }
+`
+
 const Berita = ({data}) => {
   console.log("berita", data)
   return (
@@ -115,9 +140,9 @@ const Berita = ({data}) => {
         <BeritaInner>
           <Row type="flex" align="top" gutter={20}>
             <Col sm={24} md={10}>
-              <div>
-                <iframe src="https://snazzymaps.com/embed/184816?key=AIzaSyBQUGoAI9wzi002U11ZLYDVgVKRBNIdrOo" style={{width: "100%", height: 700, border: "none"}}></iframe>
-              </div>
+              <MapsWrap>
+                <iframe src="https://snazzymaps.com/embed/184816?key=AIzaSyBQUGoAI9wzi002U11ZLYDVgVKRBNIdrOo"></iframe>
+              </MapsWrap>
             </Col>
             <Col ms={24} md={14}>
               <BeritaLeft>
@@ -128,7 +153,7 @@ const Berita = ({data}) => {
                   <Link href="/artikel">
                     <a>
                       <LinkAll>
-                        Semua
+                        Selengkapnya
                       </LinkAll>
                     </a>
                   </Link>

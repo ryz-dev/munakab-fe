@@ -1,7 +1,9 @@
 import styled from "@emotion/styled"
-import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
+import { GlobalBanner, GlobalContent, BackgroundImage, GBHeader } from "Components/components"
 import Container from "Components/container"
 import { Row, Col } from "antd"
+import { globalFetch, host } from "Config/api"
+import { NextSeo } from "next-seo"
 
 const DetailWrap = styled.div`
   padding-bottom: 100px;
@@ -107,38 +109,58 @@ const GBFlex = styled.div`
   }
 `
 
-const Detail = () => {
+const Detail = ({data}) => {
   return (
     <DetailWrap>
+      <NextSeo
+        title={data.title}
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: 'Web Portal Kab. Muna',
+          images: [
+            {
+              url: data.image,
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
-        <GBFlex>
-          <Flex>
-            <h2>Sejarah</h2>
-            <span>Kab. Muna</span>
-          </Flex>
-        </GBFlex>
+        <GBHeader
+          title={data.title}
+          desc="Kab. Muna"
+        />
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
           <Title fontSize={28} lineHeight={1.4}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+            {data.title}
           </Title>
-          <BackgroundImage src="/static/mekanisme-sop.jpg" marginTop={20}/>
-          <ContentInner>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-          </ContentInner>
+          <BackgroundImage src={data.image} marginTop={20} marginTop={40}/>
+          <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/>
         </CointentWrap>
       </GlobalContent>
     </DetailWrap>
   )
+}
+
+Detail.getInitialProps = async ({query}) => {
+  const fetchTentang = fetch(`${host}/api/pages/read?slug=${query.id}`)
+
+  let datas = null
+  
+  await globalFetch([
+    fetchTentang
+  ])
+  .then(data => {
+    datas = data
+  })
+
+  return {data: datas[0].data}
 }
 
 export default Detail

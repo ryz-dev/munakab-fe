@@ -1,10 +1,14 @@
 import styled from "@emotion/styled"
+import { css } from "@emotion/core"
 import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
 import Container from "Components/container"
 import { Row, Col } from "antd"
 import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
+import Dotdotdot from 'react-dotdotdot'
+import { NextSeo } from "next-seo"
+import { maxSM } from "Components/components"
 
 const DetailWrap = styled.div`
 
@@ -23,6 +27,9 @@ const Title = styled.h2`
   font-size: 18px;
   font-weight: bold;
   margin-top: 10px;
+  ${maxSM} {
+    font-size: 22px;
+  }
   ${({children, ...props}) => ({...props})}
 `
 const Desc = styled.p`
@@ -41,10 +48,12 @@ const NewsItem = ({item}) => (
       <BackgroundImage src={item.image} height={200}/>
     </div>
     <TextWrap>
-      <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+      <Link href="/artikel/[id]" as={`/artikel/${item.slug}`}>
         <a>
           <Title color="#fff" fontWeight="normal">
-            {item.title}
+            <Dotdotdot clamp={3}>
+              {item.title}
+            </Dotdotdot>
           </Title>
         </a>
       </Link>
@@ -73,7 +82,7 @@ const AuthroDate = styled.div`
   font-size: 14px;
 `
 const ContentInner = styled.div`
-      margin: 40px 0 60px 0;
+  margin: 40px 0 60px 0;
   p {
     margin-top: 10px;
   }
@@ -99,11 +108,34 @@ const RelatedTitle = styled.h4`
 `
 
 const Detail = ({data, related}) => {
-  console.log(related, data)
   return (
     <DetailWrap>
+      <NextSeo
+        title={data.title}
+        titleTemplate='%s - Kab. Muna'
+        description={data.excerpt}
+        openGraph={{
+          url: data.image,
+          title: data.title,
+          description: data.excerpt,
+          type: 'article',
+          article: {
+            publishedTime: data.created_at,
+            modifiedTime: data.updated_at,
+            authors: [
+              data.author,
+            ],
+            tags: [data.category],
+          },
+          images: [
+            {
+              url: data.image,
+              alt: data.title,
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
-        
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
@@ -112,11 +144,20 @@ const Detail = ({data, related}) => {
           </Title>
           <BackgroundImage marginTop={60} src={data.image} marginTop={20}/>
           <Flex marginTop={20}>
-            <Flex>
+            <Flex css={css`
+              ${maxSM} {
+                display: block;
+                margin-bottom: 10px;
+              }
+            `}>
               <AuhtorName>{data.author}</AuhtorName>
               <AuthroDate>{convertDate(data.created_at)}</AuthroDate>
             </Flex>
-            <Share>
+            <Share css={css`
+              ${maxSM} {
+                text-align: center;
+              }
+            `}>
               <span>
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                 <g clipPath="url(#clip0)">

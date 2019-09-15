@@ -35,6 +35,8 @@ const ImgItem = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+  transition: all .3s ease;
+  box-sizing: border-box;
   border: 1px solid #f5b723;
   h5 {
     font-size: 40px;
@@ -60,6 +62,13 @@ const List = styled.ul`
   background: #f8f8f8;
   li {
     height: 133px;
+    a {
+      &:hover {
+        ${ImgItem} {
+          border: 4px solid #f5b723;
+        }
+      }
+    }
     &:last-of-type {
       ${TitleWrap} {
         border: none;

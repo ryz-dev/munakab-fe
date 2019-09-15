@@ -55,6 +55,7 @@ const GalleryItemWrap = styled.div`
 const StyledCol = styled(Col)`
   ${maxSM} {
     max-width: 100%;
+    width: 100%;
   }
 `
 const GalleryItem = () => (
@@ -68,6 +69,15 @@ const Gallery = () => {
     dots: true,
     infinite: true,
     speed: 500,
+    responsive: [
+      {
+        breakpoint: 576,
+        settings: {
+          slidesToScroll: 1,
+          slidesToShow: 1,
+        }
+      }
+    ]
   }
   return (
     <GalleryWrap>

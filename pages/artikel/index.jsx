@@ -7,6 +7,7 @@ import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
 import Dotdotdot from 'react-dotdotdot'
+import { NextSeo } from "next-seo"
 
 const DetailWrap = styled.div`
 
@@ -189,11 +190,28 @@ const Artikel = () => {
   
   return (
     <DetailWrap>
+      <NextSeo
+        title="Informasi"
+        titleTemplate='%s - Kab. Muna'
+        description="Informasi seputar kab. Muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: "Informasi seputar kab. Muna",
+          images: [
+            {
+              url: '/static/muna.png',
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg" height={600}>
         <BannerContent>
           <div>
             <h2>Informasi</h2>
-            <span>Berisikan informasi seputar kab. Muna</span>
+            <span>Informasi seputar kab. Muna</span>
           </div>
         </BannerContent>
       </GlobalBanner>
@@ -215,6 +233,15 @@ const Artikel = () => {
           swipeToSlide={true}
           autoplay={true}
           focusOnSelect={true}
+          responsive={ [
+            {
+              breakpoint: 576,
+              settings: {
+                slidesToScroll: 1,
+                slidesToShow: 1,
+              }
+            }
+          ]}
         >
           {
             car2

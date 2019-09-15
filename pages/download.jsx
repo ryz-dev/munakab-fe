@@ -4,6 +4,7 @@ import Container from "Components/container"
 import { Tabs } from 'antd'
 import { GlobalContent, GlobalBanner, GBHeader, Flex } from "Components/components"
 import { globalFetch } from "Config/api"
+import { NextSeo } from "next-seo"
 
 const { TabPane } = Tabs;
 
@@ -80,9 +81,25 @@ const Download = () => {
       })
   }, [])
 
-  console.log(data)
   return (
     <DownloadWrap>
+      <NextSeo
+        title="Download"
+        titleTemplate='%s - Kab. Muna'
+        description="Web Portal Kab. muna"
+        openGraph={{
+          type: 'website',
+          url: 'https://www.example.com',
+          title: 'Kab. Muna',
+          description: 'Web Portal Kab. Muna',
+          images: [
+            {
+              url: '/static/muna.png',
+              alt: 'Kab. Muna',
+            },
+          ],
+        }}
+      />
       <GlobalBanner bg="/static/mekanisme-sop.jpg">
         <GBHeader title="Download" desc="Kab. Muna"/>
       </GlobalBanner>
