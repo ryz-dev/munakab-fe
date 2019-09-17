@@ -127,7 +127,7 @@ const NewsItem = ({item}) => (
       <BackgroundImage src={item.image} height={200}/>
     </div>
     <TextWrap>
-      <Link href="/artikel/[id]" as={`/artikel/${item.slug}`}>
+      <Link href="/informasi/[id]" as={`/informasi/${item.slug}`}>
         <a>
           <Title color="#fff" fontWeight="normal">
             <Dotdotdot clamp={3}>
@@ -144,11 +144,11 @@ const NewsItem = ({item}) => (
 )
 
 const ContentWrap = styled.div`
-  h2, h3, h4, h5, h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-size: 30px;
     font-weight: bold;
     & + p {
-      margin-top: 20px;
+      margin-top: 20px !important;
       color: #797979;
       & + h1, & + h2, & + h3, & + h4, & + h5, & + h6 {
         margin-top: 30px;
@@ -157,15 +157,30 @@ const ContentWrap = styled.div`
   }
 `
 
-const OPD = ({data}) => {
+const ExternalLink = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 25px auto 0 auto;
+  height: 40px;
+  max-width: 150px;
+  span {
+    font-size: 16px;
+  }
+`
+
+const OPD = ({data, slug}) => {
   const [related, setRelated] = useState(null)
 
   useEffect(() => {
-    globalFetch(`/api/opd/related?slug=dinas-perhubungan`)
+    globalFetch(`/api/opd/related?slug=${slug}`)
       .then(data => {
         setRelated(data)
       })
-  }, [])
+  }, [slug])
 
   return (
     <OPDWrap>
@@ -186,11 +201,21 @@ const OPD = ({data}) => {
           ],
         }}
       />
-      <GlobalBanner bg="/static/mekanisme-sop.jpg" height={600}>
+      <GlobalBanner bg={data.image} height={600} style={{height: 600}}>
         <BannerContent>
           <div>
             <span>Selamat Datang</span>
             <h2>{data.title}</h2>
+            {
+              data.link && (
+                <ExternalLink href={data.link} target="_blank">
+                  <span style={{marginRight: 10}}>Website</span>
+                  <span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="square" strokeLinejoin="arcs"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+                  </span>
+                </ExternalLink>
+              )
+            }
           </div>
         </BannerContent>
       </GlobalBanner>
@@ -262,7 +287,8 @@ OPD.getInitialProps = async ({query}) => {
   const data = await globalFetch([fetchArtikel])
   
   return {
-    data: data[0].data
+    data: data[0].data,
+    slug: query.id,
   }
 }
 

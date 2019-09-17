@@ -7,6 +7,7 @@ import Container from "Components/container"
 import { Row, Col } from "antd"
 import { Dropdown } from "Components/components"
 import { maxSM } from "Components/components"
+import slugify from "slugify"
 
 const Nav = styled.nav`
   position: absolute;
@@ -171,8 +172,10 @@ const MenuNavListChild = styled.li`
 const Globalnav = ({data}) => {
   const [node, setNode] = useState(null)
   const [toggleMenu, setToggleMenu] = useState(false)
+  const [toggleMenuOpd, setToggleMenuOpd] = useState(false)
   const [outToggle, setOutToggle] = useState(false)
   const navMenuRef = useRef(null)
+  const navMenuOdpRef = useRef(null)
   const handleNode = el => {
     setNode(null)
     setNode(el)
@@ -180,9 +183,11 @@ const Globalnav = ({data}) => {
   } 
   const handleClickOverlay = () => {
     setToggleMenu(false)
+    setToggleMenuOpd(false)
   }
   const handleClickToggleMenu = () => {
     setToggleMenu(!toggleMenu)
+    setToggleMenuOpd(false)
   }
   useEffect(() => {
     Router.events.on("routeChangeComplete", () => {
@@ -190,6 +195,13 @@ const Globalnav = ({data}) => {
     })
     console.dir(navMenuRef.current)
   }, [])
+
+  const handleClickOpd = e => {
+    e.preventDefault()
+    setToggleMenuOpd(!toggleMenuOpd)
+    setToggleMenu(false)
+  }
+
   return (
     <>
       <Nav>
@@ -214,8 +226,8 @@ const Globalnav = ({data}) => {
                       </li>
                     ))
                   } */}
-                  <li>
-                    <Link href="/artikel">
+                  {/* <li>
+                    <Link href="/informasi">
                       <a>Informasi</a>
                     </Link>
                   </li>
@@ -228,6 +240,23 @@ const Globalnav = ({data}) => {
                     <Link href="/pengaduan">
                       <a>Pengaduan</a>
                     </Link>
+                  </li>
+                  <li>
+                    <a onClick={handleClickOpd}>OPD</a>
+                  </li> */}
+                  {
+                    data && data.data.map(item => (
+                      !item.children.length && item.title !== "Beranda" && (
+                        <li>
+                          <Link href={`/${slugify(item.title, {lower: true})}`}>
+                            <a>{item.title}</a>
+                          </Link>
+                        </li>
+                      )
+                    ))
+                  }
+                  <li>
+                    <a onClick={handleClickOpd}>OPD</a>
                   </li>
                 </Flex>
               </LeftMenu>
@@ -277,34 +306,86 @@ const Globalnav = ({data}) => {
             <RowStyled type="flex">
               {
                 data && data.data.map(item => (
-                  <Col sm={6}>
-                    <div>
-                      <ul>
-                        <li>
-                          <a href="#">{item.title}</a>
-                          {
-                            item.children && (
-                              <MenuNavListChild>
-                                {
-                                  item.children.map(itemChild => (
-                                    <li>
-                                      <a href="#">{itemChild.title}</a>
-                                    </li>
-                                  ))
-                                }
-                              </MenuNavListChild>
-                            )
-                          }
-                        </li>
-                      </ul>
-                    </div>
-                  </Col>
+                  item.title !== "Organisasi Perangkat Daerah" && item.children.length ? (
+                    <Col sm={6}>
+                      <div>
+                        <ul>
+                          <li>
+                            <Link href={`/${slugify(item.title, {lower: true})}`}>{item.title}</Link>
+                            {
+                              item.children && (
+                                <MenuNavListChild>
+                                  {
+                                    item.children.map(itemChild => (
+                                      <li>
+                                        {
+                                          itemChild.url && !itemChild.parameters ? (
+                                            <a href={itemChild.url} target="_blank">{itemChild.title}</a>
+                                          ) : (
+                                            itemChild.parameters ? (
+                                              <Link
+                                                href={`/${slugify(item.title, {lower: true})}/category/[id]`}
+                                                as={`/${slugify(item.title, {lower: true})}/category/${itemChild.parameters.category}`}>{itemChild.title}</Link>
+                                            ) : (
+                                              <Link
+                                                href={`/${slugify(item.title, {lower: true})}/[id]`}
+                                                as={`/${slugify(item.title, {lower: true})}/${slugify(itemChild.title, {lower: true})}`}>{itemChild.title}</Link>
+                                            )
+                                          )
+                                        }
+                                      </li>
+                                    ))
+                                  }
+                                </MenuNavListChild>
+                              )
+                            }
+                          </li>
+                        </ul>
+                      </div>
+                    </Col>
+                  ) : null
+                ))
+              }
+            </RowStyled>
+          </NavMenu>
+          <NavMenu self={navMenuOdpRef} toggle={toggleMenuOpd} ref={navMenuOdpRef}>
+            <RowStyled type="flex">
+              {
+                data && data.data.map(item => (
+                  item.title === "Organisasi Perangkat Daerah" ? (
+                    item.children.map(itemChild => (
+                      <Col sm={6}>
+                        <div>
+                          <ul>
+                            <li>
+                              <Link href={slugify(itemChild.title, {lower: true})}>{itemChild.title}</Link>
+                              {
+                                itemChild.list && (
+                                  <MenuNavListChild>
+                                    {
+                                      itemChild.list.map(itemChildChild => (
+                                        <li>
+                                          <Link
+                                            href={`/${slugify(item.title, {lower: true})}/[category]/[id]`}
+                                            as={`/${slugify(item.title, {lower: true})}/${itemChild.parameters.category}/${slugify(itemChildChild.title, {lower: true})}`}>{itemChildChild.title}</Link>
+                                        </li>
+                                      ))
+                                    }
+                                  </MenuNavListChild>
+                                )
+                              }
+                            </li>
+                          </ul>
+                        </div>
+                      </Col>
+                    ))
+                  ) : null
                 ))
               }
             </RowStyled>
           </NavMenu>
         </Container>
-        <Overlay toggle={toggleMenu} onClick={handleClickOverlay}/>
+        <Overlay toggle={toggleMenu || toggleMenuOpd} onClick={handleClickOverlay}/>
       </Nav>
     </>
   )

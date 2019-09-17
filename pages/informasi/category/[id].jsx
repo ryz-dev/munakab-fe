@@ -8,6 +8,7 @@ import Link from "next/link"
 import { convertDate } from "Utils"
 import Dotdotdot from 'react-dotdotdot'
 import { NextSeo } from "next-seo"
+import { useRouter } from "next/router"
 
 const DetailWrap = styled.div`
 
@@ -51,7 +52,7 @@ const NewsItem = ({item}) => (
           <NewsDate>
             {convertDate(item.created_at)}
           </NewsDate>
-          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+          <Link href="informasi/[id]" as={`informasi/${item.slug}`}>
             <a>
               <Title>
                 <Dotdotdot clamp={3}>
@@ -91,7 +92,7 @@ const HeroItemWrap = ({item}) => (
           <NewsDate fontSize={18}>
             {convertDate(item.created_at)}
           </NewsDate>
-          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+          <Link href="informasi/[id]" as={`informasi/${item.slug}`}>
             <a>
               <Title fontSize={38} lineHeight={1.2} marginTop={20}>
                 <Dotdotdot clamp={3}>
@@ -148,6 +149,7 @@ const Artikel = () => {
   const [itemNews, setItemNews] = useState(null)
   const [dataState, setDataState] = useState(null)
   const [page, setPage] = useState(1)
+  const { query } = useRouter()
 
   const heroNewsRef = useRef(null)
   const itemNewsRef = useRef(null)
@@ -159,7 +161,7 @@ const Artikel = () => {
 
   useEffect(() => {
     const fetchFeatured = fetch(`${host}/api/post/featured`)
-    const fetchAll = fetch(`${host}/api/post?page=${page}&limit=6`)
+    const fetchAll = fetch(`${host}/api/post/category?category=${query.id}&page=${page}&limit=6`)
 
     globalFetch([
       fetchFeatured,
@@ -168,7 +170,7 @@ const Artikel = () => {
       .then(_data => {
         setDataState(_data)
       })
-  }, [page])
+  }, [page, query])
 
   const car2 = dataState && dataState[0].data.map(item => (
     <div>
@@ -257,9 +259,13 @@ const Artikel = () => {
               ))
             }
           </PopularNews>
-          <PaginationWrap>
-            <Pagination onChange={handleChangePage} defaultCurrent={page} pageSize={6} total={berita && berita.pagination.total}/>
-          </PaginationWrap>
+          {
+            berita ? berita.pagination && (
+              <PaginationWrap>
+                <Pagination onChange={handleChangePage} defaultCurrent={page} pageSize={6} total={berita.pagination.total}/>
+              </PaginationWrap>
+            ) : null
+          }
         </Container>
       </div>
     </DetailWrap>

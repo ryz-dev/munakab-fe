@@ -43,7 +43,7 @@ const ImgBackground = styled.img`
   }
 `
 
-const About = () => {
+const About = ({data}) => {
   return (
     <AboutWrap>
       <Container xl>
@@ -52,15 +52,15 @@ const About = () => {
             <Col sm={24} md={12}>
               <div>
                 <GlobalTitle
-                  title="Tentang"
-                  link="/profile/sejarah"
-                  desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
+                  title={data.data.title}
+                  link="/tentang"
+                  desc={data.data.excerpt}
                 />
               </div>
             </Col>
             <Col sm={24} md={12}>
               <div>
-                <ImgBackground src="/static/mekanisme-sop.jpg"/>
+                <ImgBackground src={data.data.image}/>
               </div>
             </Col>
           </Row>

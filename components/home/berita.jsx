@@ -33,6 +33,7 @@ const ImgItem = styled.img`
   object-fit: cover;
   margin-right: 30px;
   width: 88px;
+  flex: none;
   border: 1px solid transparent;
   transition: all .3s ease;
   box-sizing: border-box;
@@ -104,7 +105,7 @@ const BeritaLeft = styled.div`
 `
 const ListItem = ({item}) => (
   <li>
-    <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+    <Link href="/informasi/[id]" as={`/informasi/${item.slug}`}>
       <a>
         <Flex>
           <ImgItem src={item.image}/>

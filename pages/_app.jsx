@@ -6,6 +6,7 @@ import "isomorphic-unfetch"
 import Router from "next/router"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
+import Error from 'next/error'
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -16,6 +17,7 @@ class MyApp extends App {
     }
 
     let data = null
+    let errCode
 
     if (ctx.req) {
       const fetchHeader = fetch(`${host}/api/menu/header`)
@@ -28,12 +30,13 @@ class MyApp extends App {
         .then(_data => {
           data = _data
         })
-        .catch(err => {
-          throw Error(err)
+        .catch(() => {
+          const { res } = ctx
+          errCode = res.statusCode
         })
     }
 
-    return { pageProps, data }
+    return { pageProps, data, errCode }
   }
   constructor(props) {
     super(props)
@@ -52,7 +55,12 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, pageProps, errCode } = this.props
+    console.log("-->", errCode)
+    if (errCode) {
+      return <Error statusCode={errCode} />
+    }
+
     return (
       <Container>
         <Layout data={this.state.data}>
