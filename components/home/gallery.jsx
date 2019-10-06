@@ -1,8 +1,10 @@
+import React, { useEffect, useState } from "react"
 import styled from "@emotion/styled"
 import { Row, Col } from "antd"
 import Container from "Components/container"
 import { GlobalTitle, maxSM } from "Components/components"
 import { Carousel } from 'antd'
+import { globalFetch } from "Config/api"
 
 const GalleryWrap = styled.div`
   position: relative;
@@ -58,17 +60,27 @@ const StyledCol = styled(Col)`
     width: 100%;
   }
 `
-const GalleryItem = () => (
+const GalleryItem = ({item}) => (
   <GalleryItemWrap>
-    <GalleryItemInner src="/static/mekanisme-sop.jpg"/>
+    <GalleryItemInner src={item.path} alt={item.name}/>
   </GalleryItemWrap>
 )
 
 const Gallery = () => {
+  const [data, setData] = useState(null)
+
+  useEffect(() => {
+    globalFetch(`/api/galeri`)
+      .then(data => {
+        setData(data.data)
+      })
+  }, [])
+
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
+    autoplay: true,
     responsive: [
       {
         breakpoint: 576,
@@ -88,6 +100,7 @@ const Gallery = () => {
               <GlobalTitle
                 title="Gallery"
                 desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor"
+                link="/gallery"
                 button={{
                   border: `1px solid #f5b723`,
                   color: `#f5b723`
@@ -98,12 +111,17 @@ const Gallery = () => {
           </Col>
           <StyledCol sm={24} md={16}>
             <div>
-              <Carousel {...settings}>
-                <GalleryItem/>
-                <GalleryItem/>
-                <GalleryItem/>
-                <GalleryItem/>
-              </Carousel>
+              {
+                data && (
+                  <Carousel {...settings}>
+                    {
+                      data.map(item => (
+                        <GalleryItem item={item}/>
+                      ))
+                    }
+                  </Carousel>
+                )
+              }
             </div>
           </StyledCol>
         </Row>

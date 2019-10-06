@@ -97,7 +97,9 @@ const ButtonStyledBanner = styled(ButtonStyled)`
 const Banner = ({data}) => {
   return (
     <BannerWrap>
-      <Carousel>
+      <Carousel
+        autoplay
+      >
       {
         data.data.map(item => (
           <Item bg={item.image}>

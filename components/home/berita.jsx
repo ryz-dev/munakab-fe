@@ -151,7 +151,7 @@ const Berita = ({data}) => {
                   <TitleHero>
                     Berita
                   </TitleHero>
-                  <Link href="/artikel">
+                  <Link href="/informasi">
                     <a>
                       <LinkAll>
                         Selengkapnya

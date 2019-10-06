@@ -135,7 +135,7 @@ const Detail = ({data, related}) => {
           ],
         }}
       />
-      <GlobalBanner bg="/static/mekanisme-sop.jpg">
+      <GlobalBanner bg={data.image}>
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>

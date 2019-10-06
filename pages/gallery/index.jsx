@@ -1,9 +1,11 @@
+import React, { useEffect, useState } from "react"
 import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, BackgroundImage, GBHeader } from "Components/components"
 import Container from "Components/container"
 import { Row, Col } from "antd"
 import { globalFetch, host } from "Config/api"
 import { NextSeo } from "next-seo"
+import Carousel, { Modal, ModalGateway } from 'react-images';
 
 const DetailWrap = styled.div`
   padding-bottom: 100px;
@@ -45,7 +47,6 @@ const NewsItem = () => (
   </NewsItemWrap>
 )
 const CointentWrap = styled.div`
-  max-width: 992px;
   margin: 0 auto;
 `
 const Flex = styled.div`
@@ -109,30 +110,47 @@ const GBFlex = styled.div`
   }
 `
 
-const Profile = styled.div`
-  margin-bottom: 40px;
-`
+const GalleryWrap = styled(Row)`
 
-const ProfileImage = styled.div`
-  background: url("${({bg}) => bg}");
-  height: 300px;
-  background-size: cover;
 `
-const ProfileText = styled.div`
-  margin-top: 20px;
-  h4 {
-    font-weight: bold;
-  }
-  span {
-    color: #797878;
+const Image = styled(Col)`
+  img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    cursor: pointer;
   }
 `
 
-const Detail = ({data}) => {
+const Detail = () => {
+  const [data, setData] = useState(null)
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    globalFetch(`/api/galeri`)
+      .then(data => {
+        const arr = []
+        data.data.map(item => {
+          arr.push({src: item.path, src: item.path, name: item.name})
+        })
+        setData(arr)
+      })
+  }, [])
+
+  const handleModal = () => {
+    setModalIsOpen(!modalIsOpen)
+  }
+
+  const handleLighBox = i => {
+    setCurrent(i)
+    setModalIsOpen(true)
+  }
+
   return (
     <DetailWrap>
       <NextSeo
-        title="Struktur Pemerintahan"
+        title="Gallery"
         titleTemplate='%s - Kab. Muna'
         description="Web Portal Kab. muna"
         openGraph={{
@@ -142,92 +160,55 @@ const Detail = ({data}) => {
           description: 'Web Portal Kab. Muna',
           images: [
             {
-              url: "/static/lm-rusman-emba.jpg",
+              url: data && data[0].path,
               alt: 'Kab. Muna',
             },
           ],
         }}
       />
-      <GlobalBanner bg="/static/mekanisme-sop.jpg">
+      <GlobalBanner bg={data && data[0].src}>
         <GBHeader
-          title="Struktur Pemerintahan"
+          title="Gallery"
           desc="Kab. Muna"
         />
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
-          <Title fontSize={28} lineHeight={1.4}>
-            {data.title}
+          {/* <Title fontSize={28} lineHeight={1.4}>
+            Gallery
           </Title>
-          <BackgroundImage src={data.image} marginTop={20} marginTop={40}/>
-          <ContentInner>
-            <Row type="flex" gutter={20}>
-              <Col xs={12} sm={6}>
-                <Profile>
-                  <ProfileImage bg="/static/lm-rusman-emba.jpg"/>
-                  <ProfileText>
-                    <h4>L.M. Rusman Emba</h4>
-                    <span>Bupati Kab. Muna</span>
-                  </ProfileText>
-                </Profile>
-              </Col>
-              <Col xs={12} sm={6}>
-                <Profile>
-                  <ProfileImage bg="/static/profile-ph.jpg"/>
-                  <ProfileText>
-                    <h4>L.M. Rusman Emba</h4>
-                    <span>Anggota</span>
-                  </ProfileText>
-                </Profile>
-              </Col>
-              <Col xs={12} sm={6}>
-                <Profile>
-                  <ProfileImage bg="/static/24359750.jpg"/>
-                  <ProfileText>
-                    <h4>L.M. Rusman Emba</h4>
-                    <span>Anggota</span>
-                  </ProfileText>
-                </Profile>
-              </Col>
-              <Col xs={12} sm={6}>
-                <Profile>
-                  <ProfileImage bg="/static/24359750.jpg"/>
-                  <ProfileText>
-                    <h4>L.M. Rusman Emba</h4>
-                    <span>Anggota</span>
-                  </ProfileText>
-                </Profile>
-              </Col>
-              <Col xs={12} sm={6}>
-                <Profile>
-                  <ProfileImage bg="/static/24359750.jpg"/>
-                  <ProfileText>
-                    <h4>L.M. Rusman Emba</h4>
-                    <span>Anggota</span>
-                  </ProfileText>
-                </Profile>
-              </Col>
-            </Row>
-          </ContentInner>
+          <BackgroundImage src={data && data[0].path} marginTop={20} marginTop={40}/> */}
+          {/* <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/> */}
+          <div>
+            {/* <Carousel views={data} /> */}
+            <GalleryWrap>
+              {
+                data && (
+                  data.map((item, i) => (
+                    <Image xs={24} sm={12} md={8}>
+                      <img onClick={() => handleLighBox(i)} src={item.src} alt={item.name}/>
+                    </Image>
+                  ))
+                )
+              }
+            </GalleryWrap>
+            {data && (
+              <ModalGateway>
+                {modalIsOpen ? (
+                  <Modal onClose={handleModal}>
+                    <Carousel
+                      currentIndex={current}
+                      frameProps={{ autoSize: 'height' }}
+                      views={data} />
+                  </Modal>
+                ) : null}
+              </ModalGateway>
+            )}
+          </div>
         </CointentWrap>
       </GlobalContent>
     </DetailWrap>
   )
-}
-
-Detail.getInitialProps = async ({query}) => {
-  const fetchTentang = fetch(`${host}/api/pages/read?slug=${query.id}`)
-
-  let datas = null
-  
-  await globalFetch([
-    fetchTentang
-  ])
-  .then(data => {
-    datas = data
-  })
-
-  return {data: datas[0].data}
 }
 
 export default Detail

@@ -168,6 +168,23 @@ const MenuNavListChild = styled.li`
     font-weight: normal;
   }
 `
+const TextRunning = styled.marquee`
+  padding: 10px;
+  ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      color: #fff;
+      a {
+        color: #fff;
+        font-weight: normal;
+        padding: 10px;
+      }
+    }
+  }
+`
 
 const Globalnav = ({data}) => {
   const [node, setNode] = useState(null)
@@ -217,33 +234,6 @@ const Globalnav = ({data}) => {
                       </a>
                     </Link>
                   </LogoMenu>
-                  {/* {
-                    data.data.map(item => (
-                      <li>
-                        <Link href="/download">
-                          <a>{item.title}</a>
-                        </Link>
-                      </li>
-                    ))
-                  } */}
-                  {/* <li>
-                    <Link href="/informasi">
-                      <a>Informasi</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/pengumuman">
-                      <a>Pengumuman</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/pengaduan">
-                      <a>Pengaduan</a>
-                    </Link>
-                  </li>
-                  <li>
-                    <a onClick={handleClickOpd}>OPD</a>
-                  </li> */}
                   {
                     data && data.data.map(item => (
                       !item.children.length && item.title !== "Beranda" && (
@@ -302,6 +292,28 @@ const Globalnav = ({data}) => {
               </RightMenu>
             </FlexWrap>
           </NavInner>
+          <TextRunning
+            id="runningText"
+            behavior="scroll"
+            direction="left">
+            <Flex
+              onMouseOver={() => document.getElementById('runningText').stop()}
+              onMouseOut={() => document.getElementById('runningText').start()}
+            >
+              <ul>
+                <li><b>Berita: </b></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+              </ul>
+              <ul>
+                <li><b>Pengumuman: </b></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
+              </ul>
+            </Flex>
+          </TextRunning>
           <NavMenu self={navMenuRef} toggle={toggleMenu} ref={navMenuRef}>
             <RowStyled type="flex">
               {

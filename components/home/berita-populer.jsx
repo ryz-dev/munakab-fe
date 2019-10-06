@@ -76,7 +76,7 @@ const BeritaItem = ({item}) => (
           <Img src={item.image}/>
         </div>
         <div>
-          <Link href="artikel/[id]" as={`artikel/${item.slug}`}>
+          <Link href="/informasi/[id]" as={`/informasi/${item.slug}`}>
             <a>
               <TitleItem>
                 <Dotdotdot clamp={3}>

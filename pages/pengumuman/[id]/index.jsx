@@ -121,7 +121,7 @@ const Detail = ({data}) => {
           ],
         }}
       />
-      <GlobalBanner bg="/static/mekanisme-sop.jpg">
+      <GlobalBanner bg={data.image}>
         
       </GlobalBanner>
       <GlobalContent>
