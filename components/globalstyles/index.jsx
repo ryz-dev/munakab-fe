@@ -35,6 +35,7 @@ const GlobalStyles = () => (
       body {
         margin: 0;
         padding: 0;
+        top: 0 !important;
         overscroll-behavior-y: none;
       }
 
@@ -157,6 +158,34 @@ const GlobalStyles = () => (
         font-family: "Inter", -apple-system, BlinkMacSystemFont, Segoe UI,
           Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
           Segoe UI Symbol !important;
+      }
+
+      .skiptranslate {
+        .goog-te-banner-frame {
+          display: none;
+          position: absolute;
+        }
+      }
+
+      .goog-te-gadget {
+        & > div {
+          border-radius: 3px;
+          border: 1px solid #d6d6d6;
+          img {
+            display: none;
+          }
+          span {
+            padding: 0;
+            border: none;
+            .goog-te-menu-value {
+              span {
+                &:first-of-type {
+                  padding-right: 4px;
+                }
+              }
+            }
+          }
+        }
       }
     `}
   />

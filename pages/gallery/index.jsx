@@ -131,8 +131,17 @@ const Detail = () => {
     globalFetch(`/api/galeri`)
       .then(data => {
         const arr = []
-        data.data.map(item => {
-          arr.push({src: item.path, src: item.path, name: item.name})
+        const jpg = {
+          title: "",
+          images: []
+        }
+        data.data.filter(item => {
+          if (item.type === /\image/ig) {
+            jpg.images.push({src: item.path, src: item.path, name: item.name})
+          }
+          // if (item.type === /\dir/ig) {
+          //   arr.push({src: item.path, src: item.path, name: item.name})
+          // }
         })
         setData(arr)
       })

@@ -70,7 +70,7 @@ const Gallery = () => {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    globalFetch(`/api/galeri`)
+    globalFetch(`/api/galeri?limit=3`)
       .then(data => {
         setData(data.data)
       })

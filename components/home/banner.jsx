@@ -101,7 +101,7 @@ const Banner = ({data}) => {
         autoplay
       >
       {
-        data.data.map(item => (
+        data && data.data.map(item => (
           <Item bg={item.image}>
             <Container>
               <div>

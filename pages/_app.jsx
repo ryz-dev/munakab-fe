@@ -20,20 +20,24 @@ class MyApp extends App {
     let errCode
 
     if (ctx.req) {
-      const fetchHeader = fetch(`${host}/api/menu/header`)
-      const fetchFooter = fetch(`${host}/api/menu/footer`)
+      // const fetchHeader = fetch(`${host}/api/menu/header`)
+      // const fetchFooter = fetch(`${host}/api/menu/footer`)
+      // const beritaNav = fetch(`${host}/api/post?page=1&limit=3`)
+      // const pengumumanNav = fetch(`${host}/api/pengumuman?limit=3&page=1`)
 
-      await globalFetch([
-        fetchHeader,
-        fetchFooter
-      ])
-        .then(_data => {
-          data = _data
-        })
-        .catch(() => {
-          const { res } = ctx
-          errCode = res.statusCode
-        })
+      // await globalFetch([
+      //   fetchHeader,
+      //   fetchFooter,
+      //   beritaNav,
+      //   pengumumanNav
+      // ])
+      //   .then(_data => {
+      //     data = _data
+      //   })
+      //   .catch(() => {
+      //     const { res } = ctx
+      //     errCode = res.statusCode
+      //   })
     }
 
     return { pageProps, data, errCode }
@@ -41,11 +45,29 @@ class MyApp extends App {
   constructor(props) {
     super(props)
     this.state = {
-      data: props.data
+      data: null,
     }
   }
 
   componentDidMount() {
+    const fetchHeader = fetch(`${host}/api/menu/header`)
+      const fetchFooter = fetch(`${host}/api/menu/footer`)
+      const beritaNav = fetch(`${host}/api/post?page=1&limit=3`)
+      const pengumumanNav = fetch(`${host}/api/pengumuman?limit=3&page=1`)
+
+      globalFetch([
+        fetchHeader,
+        fetchFooter,
+        beritaNav,
+        pengumumanNav
+      ])
+        .then(_data => {
+          this.setState({data: _data});
+        })
+        .catch(() => {
+          
+        })
+
     Router.events.on('routeChangeStart', () => {
       NProgress.start()
     })
@@ -56,7 +78,6 @@ class MyApp extends App {
 
   render() {
     const { Component, pageProps, errCode } = this.props
-    console.log("-->", errCode)
     if (errCode) {
       return <Error statusCode={errCode} />
     }

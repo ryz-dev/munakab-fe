@@ -52,15 +52,15 @@ const About = ({data}) => {
             <Col sm={24} md={12}>
               <div>
                 <GlobalTitle
-                  title={data.data.title}
+                  title={data && data.data.title}
                   link="/tentang"
-                  desc={data.data.excerpt}
+                  desc={data && data.data.excerpt}
                 />
               </div>
             </Col>
             <Col sm={24} md={12}>
               <div>
-                <ImgBackground src={data.data.image}/>
+                <ImgBackground src={data && data.data.image}/>
               </div>
             </Col>
           </Row>

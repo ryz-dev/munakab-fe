@@ -23,12 +23,12 @@ const Layout = ({children, data}) => {
           ],
         }}
       />
-      <Globalnav data={data[0]} />
+      <Globalnav data={data && data[0]} berita={data && data[2]} pengumuman={data && data[3]} />
       <GlobalStyles/>
       <div>
         {children}
       </div>
-      <Globalfooter data={data[1]} />
+      <Globalfooter data={data && data[1]} />
     </>
   )
 }

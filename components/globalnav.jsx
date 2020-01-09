@@ -4,10 +4,12 @@ import { css } from "@emotion/core"
 import Link from "next/link"
 import Router from "next/router"
 import Container from "Components/container"
-import { Row, Col } from "antd"
+import { Row, Col, Select } from "antd"
 import { Dropdown } from "Components/components"
 import { maxSM } from "Components/components"
 import slugify from "slugify"
+
+const { Option } = Select;
 
 const Nav = styled.nav`
   position: absolute;
@@ -186,8 +188,9 @@ const TextRunning = styled.marquee`
   }
 `
 
-const Globalnav = ({data}) => {
+const Globalnav = ({data, berita, pengumuman}) => {
   const [node, setNode] = useState(null)
+  const [lang, setLang] = useState("id")
   const [toggleMenu, setToggleMenu] = useState(false)
   const [toggleMenuOpd, setToggleMenuOpd] = useState(false)
   const [outToggle, setOutToggle] = useState(false)
@@ -210,7 +213,41 @@ const Globalnav = ({data}) => {
     Router.events.on("routeChangeComplete", () => {
       handleClickOverlay()
     })
-    console.dir(navMenuRef.current)
+  }, [])
+
+  const fireEvent = (el, e) => {
+    if (document.createEventObject) {
+        //for IE
+        var evt = document.createEventObject();
+        return el.fireEvent('on' + e, evt)
+    } else {
+        // For other browsers
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent(e, true, true);
+        return !el.dispatchEvent(evt);
+    }
+}
+
+  useEffect(() => {
+    // console.log(document.querySelector('.goog-te-combo option:first-child'))
+
+    // if (document.querySelector('.goog-te-combo option:first-child').innerText == "Select Language") {
+    //   document.querySelector('.goog-te-combo').selectBox().change(function() {
+    //       var gObj = $('.goog-te-combo');
+    //       var db = gObj.get(0);
+    //       gObj.val($(this).val());
+    //       fireEvent(db, 'change');
+    //   });
+    // } else {
+    //     setTimeout(changeGoogleTranslate, 50);
+    // }
+
+
+    if (localStorage.getItem("lang") === "en") {
+      window.location.href = `${window.location.pathname}#googtrans(id|en)`;
+      setLang(localStorage.getItem("lang"))
+      // location.reload();
+    }
   }, [])
 
   const handleClickOpd = e => {
@@ -218,6 +255,32 @@ const Globalnav = ({data}) => {
     setToggleMenuOpd(!toggleMenuOpd)
     setToggleMenu(false)
   }
+
+  const handleChangeLang = (e) => {
+    window.localStorage.setItem("lang", e);
+    setLang(e);
+    
+    if (e === "en") {
+      window.location.href = `${window.location.pathname}#googtrans(id|${e})`;
+      location.reload();
+    } else {
+      window.location.href = window.location.pathname;
+      console.log(window.location)
+    }
+  }
+
+  const dataLang = [
+    {
+      lang: "id",
+      title: "ID",
+      href: `#googtrans(id|id)`
+    },
+    {
+      lang: "en",
+      title: "EN",
+      href: `#googtrans(id|en)`
+    }
+  ]
 
   return (
     <>
@@ -281,13 +344,16 @@ const Globalnav = ({data}) => {
                       <svg role="img" width="24px" height="24px" fill="#40a9ff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Twitter icon</title><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/></svg>
                     </a>
                   </li>
-                  <li css={css`
+                  <li>
+                    <div id="google_translate_element"></div>
+                  </li>
+                  {/* <li css={css`
                     ${maxSM} {
                       display: none;
                     }
                   `}>
                     <a href="#">Info</a>
-                  </li>
+                  </li> */}
                 </Flex>
               </RightMenu>
             </FlexWrap>
@@ -300,18 +366,30 @@ const Globalnav = ({data}) => {
               onMouseOver={() => document.getElementById('runningText').stop()}
               onMouseOut={() => document.getElementById('runningText').start()}
             >
-              <ul>
-                <li><b>Berita: </b></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-              </ul>
-              <ul>
-                <li><b>Pengumuman: </b></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-                <li><a href="#">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</a></li>
-              </ul>
+              {
+                berita && (
+                  <ul>
+                    <li><b>Berita: </b></li>
+                    {
+                      berita.data.map(item => (
+                        <li><a href="#">{item.title}</a></li>
+                      ))
+                    }
+                  </ul>
+                )
+              }
+              {
+                pengumuman && (
+                  <ul>
+                    <li><b>Pengumuman: </b></li>
+                    {
+                      pengumuman.data.map(item => (
+                        <li><a href="#">{item.title}</a></li>
+                      ))
+                    }
+                  </ul>
+                )
+              }
             </Flex>
           </TextRunning>
           <NavMenu self={navMenuRef} toggle={toggleMenu} ref={navMenuRef}>
