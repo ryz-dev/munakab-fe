@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import { GlobalBanner, GlobalContent, BackgroundImage } from "Components/components"
@@ -7,6 +8,7 @@ import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
 import Dotdotdot from 'react-dotdotdot'
+import { useRouter } from 'next/router'
 import { NextSeo } from "next-seo"
 import { maxSM } from "Components/components"
 
@@ -48,7 +50,7 @@ const NewsItem = ({item}) => (
       <BackgroundImage src={item.image} height={200}/>
     </div>
     <TextWrap>
-      <Link href="/artikel/[id]" as={`/artikel/${item.slug}`}>
+      <Link href="/informasi/[id]" as={`/informasi/${item.slug}`}>
         <a>
           <Title color="#fff" fontWeight="normal">
             <Dotdotdot clamp={3}>
@@ -107,42 +109,56 @@ const RelatedTitle = styled.h4`
   margin-top: 20px;
 `
 
-const Detail = ({data, related}) => {
+const Detail = () => {
+  const [data, setData] = useState(null);
+  const [related, setDataRelated] = useState(null);
+  const router = useRouter()
+
+  useEffect(() => {
+    const fetchArtikel = fetch(`${host}/api/post/read?slug=${router.query.id}`)
+    const fetchRelated = fetch(`${host}/api/post/related?slug=${router.query.id}`)
+    globalFetch([fetchArtikel, fetchRelated])
+      .then(_data => {
+        setData(_data[0].data)
+        setDataRelated(_data[1].data)
+      })
+  }, [router])
+
   return (
     <DetailWrap>
       <NextSeo
-        title={data.title}
+        title={data && data.title}
         titleTemplate='%s - Kab. Muna'
-        description={data.excerpt}
+        description={data && data.excerpt}
         openGraph={{
-          url: data.image,
-          title: data.title,
-          description: data.excerpt,
+          url: data && data.image,
+          title: data && data.title,
+          description: data && data.excerpt,
           type: 'article',
           article: {
-            publishedTime: data.created_at,
-            modifiedTime: data.updated_at,
+            publishedTime: data && data.created_at,
+            modifiedTime: data && data.updated_at,
             authors: [
-              data.author,
+              data && data.author,
             ],
-            tags: [data.category],
+            tags: [data && data.category],
           },
           images: [
             {
-              url: data.image,
-              alt: data.title,
+              url: data && data.image,
+              alt: data && data.title,
             },
           ],
         }}
       />
-      <GlobalBanner bg={data.image}>
+      <GlobalBanner bg={data && data.image}>
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
           <Title fontSize={28} lineHeight={1.4}>
-            {data.title}
+            {data && data.title}
           </Title>
-          <BackgroundImage marginTop={60} src={data.image} marginTop={20}/>
+          <BackgroundImage marginTop={60} src={data && data.image} marginTop={20}/>
           <Flex marginTop={20}>
             <Flex css={css`
               ${maxSM} {
@@ -150,8 +166,8 @@ const Detail = ({data, related}) => {
                 margin-bottom: 10px;
               }
             `}>
-              <AuhtorName>{data.author}</AuhtorName>
-              <AuthroDate>{convertDate(data.created_at)}</AuthroDate>
+              <AuhtorName>{data && data.author}</AuhtorName>
+              <AuthroDate>{convertDate(data && data.created_at)}</AuthroDate>
             </Flex>
             <Share css={css`
               ${maxSM} {
@@ -177,11 +193,11 @@ const Detail = ({data, related}) => {
               </span>
             </Share>
           </Flex>
-          <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/>
+          <ContentInner dangerouslySetInnerHTML={{__html: data && data.body}}/>
         </CointentWrap>
       </GlobalContent>
       {
-        related.length ? (
+        related && related.length ? (
           <RelatedWrap>
             <Container>
               <RelatedInner>
@@ -204,15 +220,15 @@ const Detail = ({data, related}) => {
   )
 }
 
-Detail.getInitialProps = async ({query}) => {
-  const fetchArtikel = fetch(`${host}/api/post/read?slug=${query.id}`)
-  const fetchRelated = fetch(`${host}/api/post/related?slug=${query.id}`)
-  const data = await globalFetch([fetchArtikel, fetchRelated])
+// Detail.getInitialProps = async ({query}) => {
+//   const fetchArtikel = fetch(`${host}/api/post/read?slug=${query.id}`)
+//   const fetchRelated = fetch(`${host}/api/post/related?slug=${query.id}`)
+//   const data = await globalFetch([fetchArtikel, fetchRelated])
   
-  return {
-    data: data[0].data,
-    related: data[1].data
-  }
-}
+//   return {
+//     data: data[0].data,
+//     related: data[1].data
+//   }
+// }
 
 export default Detail

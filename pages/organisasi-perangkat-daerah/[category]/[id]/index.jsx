@@ -6,6 +6,7 @@ import { Row, Col, Carousel, Pagination } from "antd"
 import { globalFetch, host } from "Config/api"
 import Link from "next/link"
 import { convertDate } from "Utils"
+import { useRouter } from 'next/router'
 import Dotdotdot from 'react-dotdotdot'
 import { NextSeo } from "next-seo"
 
@@ -181,8 +182,10 @@ const ExternalLink = styled.a`
   }
 `
 
-const OPD = ({data, slug}) => {
+const OPD = ({slug}) => {
   const [related, setRelated] = useState(null)
+  const [data, setData] = useState(null)
+  const router = useRouter()
 
   useEffect(() => {
     globalFetch(`/api/opd/related?slug=${slug}`)
@@ -191,17 +194,26 @@ const OPD = ({data, slug}) => {
       })
   }, [slug])
 
+  useEffect(() => {
+    const fetchArtikel = `/api/opd/read?slug=${router.query.id}`
+
+    globalFetch(fetchArtikel)
+      .then(_data => {
+        setData(_data.data)
+      })
+  }, [router])
+
   return (
     <OPDWrap>
       <NextSeo
-        title={data.title}
+        title={data && data.title}
         titleTemplate='%s - Kab. Muna'
         description="Web Portal Kab. muna"
         openGraph={{
           type: 'website',
           url: 'https://www.example.com',
           title: 'Kab. Muna',
-          description: data.welcome_message,
+          description: data && data.welcome_message,
           images: [
             {
               url: '/static/muna.png',
@@ -210,13 +222,13 @@ const OPD = ({data, slug}) => {
           ],
         }}
       />
-      <GlobalBanner bg={data.image} height={600} style={{height: 600}}>
+      <GlobalBanner bg={data && data.image} height={600} style={{height: 600}}>
         <BannerContent>
           <div>
             <span>Selamat Datang</span>
-            <h2>{data.title}</h2>
+            <h2>{data && data.title}</h2>
             {
-              data.link && (
+              data && data.link && (
                 <ExternalLink href={data.link} target="_blank">
                   <span style={{marginRight: 10}}>Website</span>
                   <span>
@@ -233,16 +245,16 @@ const OPD = ({data, slug}) => {
           <Col sm={12}>
             <BCLeft>
               <h3>Sambutan</h3>
-              <p>Ketua {data.title}</p>
+              <p>Ketua {data && data.title}</p>
             </BCLeft>
           </Col>
           <Col sm={12}>
             <div>
-              <Quote dangerouslySetInnerHTML={{__html: data.welcome_message}}/>
+              <Quote dangerouslySetInnerHTML={{__html: data && data.welcome_message}}/>
               <Author>
-                <AuthorProfile src={data.kepala_dinas_image}></AuthorProfile>
+                <AuthorProfile src={data && data.kepala_dinas_image}></AuthorProfile>
                 <div>
-                  {data.kepala_dinas}
+                  {data && data.kepala_dinas}
                 </div>
               </Author>
             </div>
@@ -253,7 +265,7 @@ const OPD = ({data, slug}) => {
         <Container>
           <OPDContent>
             <Container type="sm">
-              <ContentWrap dangerouslySetInnerHTML={{__html: data.body}}>
+              <ContentWrap dangerouslySetInnerHTML={{__html: data && data.body}}>
                 {/* <ContentSection>
                   <TitleContent>Tugas Pokok</TitleContent>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
@@ -291,14 +303,14 @@ const OPD = ({data, slug}) => {
   )
 }
 
-OPD.getInitialProps = async ({query}) => {
-  const fetchArtikel = fetch(`${host}/api/opd/read?slug=${query.id}`)
-  const data = await globalFetch([fetchArtikel])
+// OPD.getInitialProps = async ({query}) => {
+//   const fetchArtikel = fetch(`${host}/api/opd/read?slug=${query.id}`)
+//   const data = await globalFetch([fetchArtikel])
   
-  return {
-    data: data[0].data,
-    slug: query.id,
-  }
-}
+//   return {
+//     data: data[0].data,
+//     slug: query.id,
+//   }
+// }
 
 export default OPD
