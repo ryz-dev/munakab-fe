@@ -4,6 +4,7 @@ import Container from "Components/container"
 import { ButtonStyled, maxSM } from "Components/components"
 
 const BannerWrap = styled.div`
+  height: 650px;
   .ant-carousel {
     .slick-slide {
       text-align: center;
