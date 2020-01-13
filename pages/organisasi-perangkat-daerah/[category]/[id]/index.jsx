@@ -17,6 +17,15 @@ const OPDContent = styled.div`
   margin-top: 60px;
   position: relative;
   padding: 60px 0;
+  &:after {
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 30%;
+    background: url('/static/bg-text-muna.png') no-repeat;
+    content: " ";
+  }
 `
 
 const BannerContent = styled.div`
