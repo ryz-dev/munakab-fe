@@ -45,7 +45,7 @@ const Home = () => {
   )
 }
 
-Home.getInitialProps = async () => {
+// Home.getInitialProps = async () => {
   // const fetchBanner = fetch(`${host}/api/slider`)
   // const fetchBeritaFeatured = fetch(`${host}/api/post/featured?page=1&limit=5`)
   // const fetchBerita = fetch(`${host}/api/post?page=1&limit=5`)
@@ -66,6 +66,6 @@ Home.getInitialProps = async () => {
   // })
 
   // return {data: datas}
-}
+// }
 
 export default Home

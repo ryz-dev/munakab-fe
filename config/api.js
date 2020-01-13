@@ -1,6 +1,6 @@
 import "isomorphic-unfetch"
 
-export const host = "https://muna.ryzdev.id"
+export const host = "http://180.250.218.142:8080"
 
 export const globalFetch = path => {
   if (Array.isArray(path)) {

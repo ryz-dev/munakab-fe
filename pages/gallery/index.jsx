@@ -169,13 +169,13 @@ const Detail = () => {
           description: 'Web Portal Kab. Muna',
           images: [
             {
-              url: data && data[0].path,
+              url: data && data[0] && data[0].path,
               alt: 'Kab. Muna',
             },
           ],
         }}
       />
-      <GlobalBanner bg={data && data[0].src}>
+      <GlobalBanner bg={data && data[0] && data[0].src}>
         <GBHeader
           title="Gallery"
           desc="Kab. Muna"

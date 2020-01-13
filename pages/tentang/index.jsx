@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { GlobalBanner, GlobalContent, BackgroundImage, GBHeader } from "Components/components"
 import Container from "Components/container"
@@ -109,11 +110,23 @@ const GBFlex = styled.div`
   }
 `
 
-const Detail = ({data}) => {
+const Detail = () => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchTentang = `/api/pages/read?slug=tentang`
+     globalFetch(
+      fetchTentang
+    )
+    .then(data => {
+      setData(data.data)
+    })
+  }, [])
+
   return (
     <DetailWrap>
       <NextSeo
-        title={data.title}
+        title={data && data.title}
         titleTemplate='%s - Kab. Muna'
         description="Web Portal Kab. muna"
         openGraph={{
@@ -123,44 +136,44 @@ const Detail = ({data}) => {
           description: 'Web Portal Kab. Muna',
           images: [
             {
-              url: data.image,
+              url: data && data.image,
               alt: 'Kab. Muna',
             },
           ],
         }}
       />
-      <GlobalBanner bg={data.image}>
+      <GlobalBanner bg={data && data.image}>
         <GBHeader
-          title={data.title}
+          title={data && data.title}
           desc="Kab. Muna"
         />
       </GlobalBanner>
       <GlobalContent>
         <CointentWrap>
           <Title fontSize={28} lineHeight={1.4}>
-            {data.title}
+            {data && data.title}
           </Title>
-          <BackgroundImage src={data.image} marginTop={20} marginTop={40}/>
-          <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/>
+          <BackgroundImage src={data && data.image} marginTop={20} marginTop={40}/>
+          <ContentInner dangerouslySetInnerHTML={{__html: data && data.body}}/>
         </CointentWrap>
       </GlobalContent>
     </DetailWrap>
   )
 }
 
-Detail.getInitialProps = async ({query}) => {
-  const fetchTentang = fetch(`${host}/api/pages/read?slug=tentang`)
+// Detail.getInitialProps = async ({query}) => {
+//   const fetchTentang = fetch(`${host}/api/pages/read?slug=tentang`)
 
-  let datas = null
+//   let datas = null
   
-  await globalFetch([
-    fetchTentang
-  ])
-  .then(data => {
-    datas = data
-  })
+//   await globalFetch([
+//     fetchTentang
+//   ])
+//   .then(data => {
+//     datas = data
+//   })
 
-  return {data: datas[0].data}
-}
+//   return {data: datas[0].data}
+// }
 
 export default Detail
