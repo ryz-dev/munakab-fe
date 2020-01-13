@@ -100,6 +100,7 @@ const Video = () => {
                   color: `#1d9fff`
                 }}
                 color="#333"
+                link={null}
               />
             </div>
           </Col>

@@ -39,13 +39,17 @@ export const GlobalTitle = ({title, desc, link = "/", color, button}) => (
     <Desc color={color}>
       {desc}
     </Desc>
-    <Link href={link}>
-      <a>
-        <ButtonStyled {...button}>
-          Selengkpanya
-        </ButtonStyled>
-      </a>
-    </Link>
+    {
+      link && (
+        <Link href={link}>
+          <a>
+            <ButtonStyled {...button}>
+              Selengkpanya
+            </ButtonStyled>
+          </a>
+        </Link>
+      )
+    }
   </GlobalTitleWrap>
 )
 
