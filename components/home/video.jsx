@@ -94,7 +94,7 @@ const Video = () => {
             <div>
               <GlobalTitle
                 title="Video"
-                desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labor"
+                desc="Video Udara Kota Raha di Pulau Muna Sulawesi Tenggara"
                 button={{
                   border: `1px solid #1d9fff`,
                   color: `#1d9fff`
