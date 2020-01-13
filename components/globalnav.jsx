@@ -372,7 +372,7 @@ const Globalnav = ({data, berita, pengumuman}) => {
                     <li><b>Berita: </b></li>
                     {
                       berita.data.map(item => (
-                        <li><a href="#">{item.title}</a></li>
+                        <li><Link href="/informasi/[id]" as={`/informasi/${item.slug}`}>{item.title}</Link></li>
                       ))
                     }
                   </ul>
@@ -384,7 +384,7 @@ const Globalnav = ({data, berita, pengumuman}) => {
                     <li><b>Pengumuman: </b></li>
                     {
                       pengumuman.data.map(item => (
-                        <li><a href="#">{item.title}</a></li>
+                        <li><Link href="/pengumuman/[id]" as={`/pengumuman/${item.slug}`}>{item.title}</Link></li>
                       ))
                     }
                   </ul>
