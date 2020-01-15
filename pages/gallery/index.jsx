@@ -124,26 +124,32 @@ const Image = styled(Col)`
 
 const Detail = () => {
   const [data, setData] = useState(null)
+  const [dataImg, setDataImg] = useState(null)
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [modalIsOpenImg, setModalIsOpenImg] = useState(false)
   const [current, setCurrent] = useState(0)
+  const [currentImg, setCurrentImg] = useState(0)
 
   useEffect(() => {
+    const arr = []
+    const img = []
+    const jpg = {
+      title: "",
+      images: []
+    }
     globalFetch(`/api/galeri`)
       .then(data => {
-        const arr = []
-        const jpg = {
-          title: "",
-          images: []
-        }
         data.data.filter(item => {
-          if (item.type === /\image/ig) {
-            jpg.images.push({src: item.path, src: item.path, name: item.name})
+          if (/(image)/g.test(item.type)) {
+            console.log(item)
+            img.push({src: item.path, src: item.path, name: item.name})
           }
-          // if (item.type === /\dir/ig) {
-          //   arr.push({src: item.path, src: item.path, name: item.name})
-          // }
+          if (/(dir)/g.test(item.type)) {
+            arr.push({src: item.path, src: item.path, name: item.name})
+          }
         })
         setData(arr)
+        setDataImg(img)
       })
   }, [])
 
@@ -151,9 +157,18 @@ const Detail = () => {
     setModalIsOpen(!modalIsOpen)
   }
 
+  const handleModalImg = () => {
+    setModalIsOpenImg(!modalIsOpenImg)
+  }
+
   const handleLighBox = i => {
     setCurrent(i)
     setModalIsOpen(true)
+  }
+
+  const handleLighBoxImg = i => {
+    setCurrentImg(i)
+    setModalIsOpenImg(true)
   }
 
   return (
@@ -190,12 +205,23 @@ const Detail = () => {
           {/* <ContentInner dangerouslySetInnerHTML={{__html: data.body}}/> */}
           <div>
             {/* <Carousel views={data} /> */}
-            <GalleryWrap>
+            <GalleryWrap gutter={20}>
               {
                 data && (
                   data.map((item, i) => (
                     <Image xs={24} sm={12} md={8}>
                       <img onClick={() => handleLighBox(i)} src={item.src} alt={item.name}/>
+                    </Image>
+                  ))
+                )
+              }
+            </GalleryWrap>
+            <GalleryWrap gutter={20}>
+              {
+                dataImg && (
+                  dataImg.map((item, i) => (
+                    <Image xs={24} sm={12} md={8}>
+                      <img onClick={() => handleLighBoxImg(i)} src={item.src} alt={item.name}/>
                     </Image>
                   ))
                 )
@@ -209,6 +235,18 @@ const Detail = () => {
                       currentIndex={current}
                       frameProps={{ autoSize: 'height' }}
                       views={data} />
+                  </Modal>
+                ) : null}
+              </ModalGateway>
+            )}
+            {dataImg && (
+              <ModalGateway>
+                {modalIsOpenImg ? (
+                  <Modal onClose={handleModalImg}>
+                    <Carousel
+                      currentIndex={currentImg}
+                      frameProps={{ autoSize: 'height' }}
+                      views={dataImg} />
                   </Modal>
                 ) : null}
               </ModalGateway>

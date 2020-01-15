@@ -160,6 +160,10 @@ const GlobalStyles = () => (
           Segoe UI Symbol !important;
       }
 
+      .react-images__positioner {
+        z-index: 99999 !important;
+      }
+
       .skiptranslate {
         .goog-te-banner-frame {
           display: none;
