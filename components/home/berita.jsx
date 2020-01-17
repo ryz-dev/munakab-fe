@@ -134,7 +134,6 @@ const MapsWrap = styled.div`
 `
 
 const Berita = ({data}) => {
-  console.log("berita", data)
   return (
     <BeritaWrap>
       <Container xl>

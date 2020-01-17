@@ -70,4 +70,8 @@ const About = ({data}) => {
   )
 }
 
+About.propTypes = {
+  data: PropTypes.any
+}
+
 export default About

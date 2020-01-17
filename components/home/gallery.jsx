@@ -66,6 +66,10 @@ const GalleryItem = ({item}) => (
   </GalleryItemWrap>
 )
 
+GalleryItem.propTypes = {
+  item: PropTypes.any
+}
+
 const Gallery = () => {
   const [data, setData] = useState(null)
 

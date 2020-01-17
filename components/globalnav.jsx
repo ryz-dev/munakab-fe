@@ -265,7 +265,6 @@ const Globalnav = ({data, berita, pengumuman}) => {
       location.reload();
     } else {
       window.location.href = window.location.pathname;
-      console.log(window.location)
     }
   }
 

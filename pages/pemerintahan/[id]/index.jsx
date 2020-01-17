@@ -140,7 +140,6 @@ const Detail = ({data, slug}) => {
   //       setData(data.data)
   //     })
   // }, [])
-  console.log(data, slug)
 
   const isDynamic = slug === "struktur-pemerintahan"
 

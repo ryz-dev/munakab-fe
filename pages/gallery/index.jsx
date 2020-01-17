@@ -141,7 +141,6 @@ const Detail = () => {
       .then(data => {
         data.data.filter(item => {
           if (/(image)/g.test(item.type)) {
-            console.log(item)
             img.push({src: item.path, src: item.path, name: item.name})
           }
           if (/(dir)/g.test(item.type)) {

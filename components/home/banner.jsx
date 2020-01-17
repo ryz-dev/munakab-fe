@@ -125,4 +125,8 @@ const Banner = ({data}) => {
   )
 }
 
+Banner.propTypes = {
+  data: PropTypes.any
+}
+
 export default Banner
